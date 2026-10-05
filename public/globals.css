@@ -1,0 +1,25 @@
+/* MovieREV design reset.
+ *
+ * The Figma export is a fixed 1920x1080 canvas of absolutely positioned
+ * elements, so the page must never scroll. Without the overflow reset the
+ * vertical scrollbar consumes ~17px of width and paints a grey bar over
+ * the right edge of the design.
+ *
+ * Without the margin reset the browser default body margin of 8px pushes
+ * the design div 8px to the right, leaving a white strip on the left.
+ */
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+/* Matches the top stop of the design gradient so any residual gap at a
+ * viewport other than 1920x1080 reads as page background, not a seam. */
+body {
+    background: #1f142f;
+}
