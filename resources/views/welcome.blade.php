@@ -35,7 +35,7 @@ tailwind.config = {
         </script>
 </head>
 <body>
-<div class="bg-white overflow-hidden border-0 border-none w-full min-w-[1280px] min-h-[720px] relative" ><div class="absolute top-0 left-0 w-[1920px] h-[1080px] [background:linear-gradient(180deg,rgba(31,20,47,1)_30%,rgba(73,46,110,1)_100%)]" ></div>
+<div class="bg-white overflow-hidden border-0 border-none w-full min-w-[1920px] min-h-[1080px] relative" ><div class="absolute top-0 left-0 w-[1920px] h-[1080px] [background:linear-gradient(180deg,rgba(31,20,47,1)_30%,rgba(73,46,110,1)_100%)]" ></div>
 <div class="absolute top-[236px] left-[9px] w-[171px] h-[31px] bg-[#d9d9d9] rounded-[11px]" ></div>
 <div class="absolute top-[218px] left-[45px] w-[86px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#1e1e1e] text-[15px] tracking-[4.65px] leading-[68px] whitespace-nowrap" >Reviews</div>
 <img class="absolute top-0 left-0 w-[100px] h-[99px] aspect-[1] object-cover" src="img/1449066-1.png" />
