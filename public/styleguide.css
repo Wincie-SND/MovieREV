@@ -1,0 +1,36 @@
+/* MovieREV design tokens.
+ *
+ * The Figma export references these via var() and via the tailwind.config
+ * theme extension in welcome.blade.php (bg-color-background-default-default,
+ * text-color-text-default-tertiary, font-single-line-body-base, ...).
+ * Without them the search pill renders unstyled and its placeholder text
+ * inherits the page font at the wrong size.
+ */
+
+:root {
+    /* colors */
+    --color-background-default-default: #ffffff;
+    --color-border-default-default: #d9d9d9;
+    --color-primitives-gray-300: #d9d9d9;
+    --color-primitives-gray-400: #b4b4b4;
+    --color-primitives-white-1000: #ffffff;
+    --color-text-default-tertiary: #727272;
+
+    /* single-line-body-base */
+    --single-line-body-base-font-family: 'Roboto', Helvetica, Arial, sans-serif;
+    --single-line-body-base-font-weight: 400;
+    --single-line-body-base-font-size: 22.5px;
+    --single-line-body-base-letter-spacing: 0.1px;
+    --single-line-body-base-line-height: 30px;
+    --single-line-body-base-font-style: normal;
+
+    /* spacing scale (the design is 1.5x from its 1280x720 source) */
+    --size-space-200: 6px;
+    --size-space-300: 9px;
+    --size-space-400: 12px;
+    --size-space-450: 13.5px;
+    --size-space-600: 18px;
+
+    /* radius */
+    --size-radius-full: 9999px;
+}

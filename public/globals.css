@@ -7,7 +7,22 @@
  *
  * Without the margin reset the browser default body margin of 8px pushes
  * the design div 8px to the right, leaving a white strip on the left.
+ *
+ * The box-sizing reset is the important one. The Figma export emits
+ * `corePlugins: { preflight: false }`, so Tailwind never applies its
+ * `*, ::before, ::after { box-sizing: border-box }` base rule and every
+ * element falls back to the browser default of content-box. That makes
+ * `h-[34px]` mean "34px of content", so the declared padding and border
+ * stack on top of it. The search pill was the worst case: 34 + 9 + 9 of
+ * padding + 1px of border on each side rendered it 54px tall instead of
+ * 34px, which ate the gap between the search bar and the "Trending" label.
  */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
 
 html,
 body {
