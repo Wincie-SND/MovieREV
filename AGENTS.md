@@ -1,58 +1,123 @@
 # MovieREV
 
-Laravel 13.34 on PHP 8.3 (`composer.json` requires `^8.3`; the box runs 8.3.33 ZTS). Single app, no packages/workspace. SQLite only — no MySQL/Postgres driver is configured or tested against.
+Laravel 13.34 on PHP `^8.3`. Single app, no packages/workspace. `main` only — no branches, no PRs, no CI.
 
-`AGENTS.md` and `CLAUDE.md` are byte-identical stubs that shipped with the Laravel skeleton and contain nothing but "install Laravel Boost" boilerplate. Boost is **not** installed (`vendor/laravel/boost` absent, not in `composer.json`). Ignore that boilerplate; if you ever do install Boost, `php artisan boost:install` overwrites both files, so merge rather than clobber.
+## What the app actually is
 
-## Current state
+A single static landing page. `routes/web.php` is one closure returning `view('welcome')`. No models, migrations, controllers, or forms beyond the stock `User`. Don't invent architecture around it.
 
-Skeleton only. Real product code is one landing page: `resources/views/welcome.blade.php` + `resources/css/app.css`. `routes/web.php` is a single closure returning `view('welcome')`. No domain models, migrations, or controllers beyond the stock `User`.
+`resources/views/welcome.blade.php` is a **Figma export**, not hand-written markup:
 
-- `welcome.blade.php` uses hand-written semantic classes (`.movie-app`, `.header`, `.main-container`, `.sidebar`, `.movie-list`). It is **not** styled yet — `app.css` still ends with `/* ...the rest of the CSS... */`.
-- Tailwind v4 is wired into `vite.config.js` via `@tailwindcss/vite`, but `app.css` currently has no `@import 'tailwindcss'`, so **no Tailwind utilities compile**. The build output is the ~90 bytes of hand-written CSS. Don't write utility classes expecting them to work; add the `@import` first or extend the hand-written stylesheet.
+- Fixed 1920x1080 canvas of absolutely positioned divs (`min-w-[1920px] h-[1080px]`). Pixel values are scaled 1.5x from a 1280x720 source. Don't "fix" the magic numbers.
+- Styling comes from the **Tailwind CDN** (`https://cdn.tailwindcss.com`) with an inline `tailwind.config` mapping design tokens to CSS variables. **This bypasses Vite entirely — the view no longer calls `@vite`.** Local `vite.config.js` / `resources/css/app.css` / `resources/js/app.js` are dead weight for the page; the served stylesheets are static files in `public/`.
+- `corePlugins: { preflight: false }` is deliberate, so Tailwind never applies its `box-sizing` reset. `public/globals.css` restores it by hand and `overflow: hidden` on html/body. Its header comment explains why in detail — read it before touching layout.
+
+**Two different `styleguide.css` files exist and only one is live:**
+
+- `public/styleguide.css` — served, referenced by `<link href="styleguide.css">`. Hand-tuned token values matching the 1.5x design (22.5px font, `--size-space-450`, etc.).
+- `resources/css/styleguide.css` — the raw Figma export. Referenced by nothing. Editing it changes nothing.
+
+If you change a token, edit `public/styleguide.css`. Confirm with a grep before assuming either is wired up.
+
+## Toolchain gotcha: the wrong PHP and the wrong npm are on PATH
+
+`php` resolves to `C:\Program Files\PHP\current\php.exe` (8.3.35), which is **missing `openssl`, `pdo_mysql`, `pdo_sqlite`, and `mbstring`**. Composer and Artisan both fail against it:
+
+```
+The openssl extension is required for SSL/TLS protection but is not available.
+```
+
+Use Laragon's PHP instead, which has the full extension set:
+
+```powershell
+$php = "C:\laragon\bin\php\php-8.3.33-Win32-vs16-x64\php.exe"
+& $php artisan test
+```
+
+### Symptom: `could not find driver`
+
+If the site 500s with
+
+```
+Illuminate\Database\QueryException  ...  could not find driver
+  (Connection: mysql, Host: 127.0.0.1, Port: 3306, Database: movierev, ...)
+```
+
+**the database is fine — you are on the wrong PHP binary.** The Ignition page's `PHP 8.3.35` line is the tell: that's `C:\Program Files\PHP\current`, which has no `pdo_mysql`. Do not go chasing migrations. Confirm with:
+
+```powershell
+php -r "echo PHP_VERSION,' pdo_mysql=',(int)extension_loaded('pdo_mysql');"
+```
+
+Restart the server with Laragon's binary instead of fixing the DB:
+
+```powershell
+Get-Process php -EA SilentlyContinue | Stop-Process -Force   # if one is holding :8000
+& $php artisan serve
+```
+
+Laragon's Apache (ports 80/443, `http://movierev.test`) is configured via `C:/laragon/etc/apache2/mod_php.conf` and already uses Laragon's PHP 8.3.33 — that path works out of the box. `php artisan serve` on `:8000` is the one that breaks, because it inherits PATH `php`. Either URL is fine once the binary is right.
+
+Two further traps:
+
+- **`composer dev` inherits whichever `php` is first on PATH**, so it will happily spawn the broken `php artisan serve`. Either run it from a Laragon terminal (which prepends its own PHP) or invoke `& $php artisan dev` directly.
+- **`composer install` fails on a clean checkout** — Laragon's `php.ini` has `;extension=zip` commented out and there's no `unzip`/`7z` on PATH, so dist archives can't be extracted. `--prefer-source` fails too (Windows rejects `nul.env` in a test fixture). Workaround without touching the machine: `& $php -d "extension=...\ext\php_zip.dll" "C:\laragon\bin\composer\composer.phar" install`.
+- **Use the system npm, not Laragon's.** `C:\laragon\bin\nodejs\node-v22` ships npm 10.9.8, which strips `libc` keys from `package-lock.json` and leaves you with a spurious 54-line diff. `C:\Program Files\nodejs` has npm 11.19.1, which leaves the lockfile clean. In PowerShell call `npm.cmd` explicitly — `npm` resolves to `npm.ps1` and dies on the execution policy.
 
 ## Commands
 
 ```sh
-composer dev              # php artisan dev -> serve + queue:listen + vite, concurrently
-php artisan dev:list      # show the 3 registered dev processes
-composer test             # config:clear, then php artisan test
-npm run build             # required before tests see any @vite asset (see below)
-vendor/bin/pint           # formatter; no pint.json, so the default "laravel" preset
+composer dev          # php artisan dev -> serve + queue:listen + vite, concurrently
+php artisan dev:list  # list the 3 registered dev processes
+composer test         # config:clear, then php artisan test
+npm run build         # vite build
+vendor/bin/pint       # formatter, default "laravel" preset (no pint.json)
 ```
 
-Single test / filtered run: `php artisan test --filter=the_application_returns_a_successful_response`, or `php artisan test tests/Feature`.
+Single test: `php artisan test --filter=test_the_application_returns_a_successful_response`, or `php artisan test tests/Feature`.
 
-No CI. No pre-commit hooks. No phpstan/rector config despite `laravel/pao` supporting them.
+`php artisan test` **returns JSON, not a PHPUnit table.** `laravel/pao` detects an agent (checks `OPENCODE`, `CLAUDEECODE`, `CURSOR_AGENT`, `CODEX_*`, ...) and rebinds `OutputStyle` to strip ANSI:
 
-## Gotchas
+```json
+{"tool":"phpunit","result":"failed","tests":2,"errors":1,"error_details":[{"test":"...","message":"..."}]}
+```
 
-**`php artisan test` returns JSON, not human output.** `laravel/pao` is a dev dependency; when it detects an agent (it checks `OPENCODE`, `OPENCODE_CLIENT`, `CURSOR_AGENT`, `CLAUDECODE`, `CODEX_*`, ... in the environment) it rebinds `OutputStyle` and strips ANSI from every artisan command. Expect `{"tool":"phpunit","result":"failed","tests":2,...}` with a `failures[].message` holding the stack trace. Use `PAO_DISABLE=true` to get the normal PHPUnit table when reading output by eye; `PAO_FORCE=true` forces JSON when the env isn't detected.
+Set `PAO_DISABLE=true` for the normal green/red table; `PAO_FORCE=true` forces JSON when the env isn't detected.
 
-**Feature tests fail on a fresh clone with `ViteManifestNotFoundException`.** `welcome.blade.php` calls `@vite`, and `public/build` is gitignored. `tests/Feature/ExampleTest.php` GETs `/`, so it 500s until someone runs `npm run build`. Run `npm run build` before trusting a test failure.
+## `public/build` is committed
 
-`vendor/bin/pint --test` currently fails on `routes/web.php` (missing trailing newline) — pre-existing, not something you introduced.
+`public/build` is tracked (commit ceeeccf). Because asset filenames are content-hashed, every rebuild **rewrites the filename and leaves the old hash as a deleted file** — commit both the `A` and the `D`, or `manifest.json` ends up referencing an asset that isn't in the tree. Use `git add -A public/build`.
 
-`.npmrc` sets `ignore-scripts=true`, so `npm install` will not run lifecycle scripts.
+The view no longer calls `@vite`, so nothing currently depends on this directory; it exists so fresh clones don't need a build step. Build with the **system** npm (see the npm note above) or you will also churn `package-lock.json`.
 
-`npm run build` prints a warning that font `optimizedFallbacks` needs the optional `fontaine` package. Harmless; the build succeeds and self-hosts Instrument Sans 400/500/600.
+The `fontaine` warning about `optimizedFallbacks` during `npm run build` is harmless.
+
+## Database
+
+Dev DB is **MySQL via Laragon/phpMyAdmin** (commit 56af374): database `movierev`, user `root`, empty password, port 3306. It is migrated (users, password_reset_tokens, sessions, cache, cache_locks, jobs, job_batches, failed_jobs).
+
+Because `SESSION_DRIVER`, `CACHE_STORE`, and `QUEUE_CONNECTION` all default to `database`, **an unmigrated database makes every page 500** with `SQLSTATE[42S02] Table 'movierev.sessions' doesn't exist` — the `sessions` table is created by `0001_01_01_000000_create_users_table.php`, not a file of its own. Fix with `php artisan migrate`. The tests will *not* catch this: `phpunit.xml` forces `array` session/cache and in-memory SQLite, so they pass green while the real app is broken.
+
+`phpunit.xml` overrides this for tests: `DB_CONNECTION=sqlite`, `:memory:`, with `array` session/cache and `sync` queue. No migrations run automatically — add `RefreshDatabase` per test as needed.
+
+`DatabaseSeeder` is idempotent (`updateOrCreate`), so `db:seed` can be re-run freely.
+
+`database/database.sqlite` does not exist and isn't tracked; nothing references it.
 
 ## Environment
 
-`.env` (gitignored) is already provisioned: `APP_KEY` set, `APP_DEBUG=true`. Dev drivers are all `database` — `SESSION_DRIVER`, `CACHE_STORE`, and `QUEUE_CONNECTION` — so `php artisan migrate` is required before any page renders; stock migrations cover `users`, `cache`, and `jobs`. `database/database.sqlite` exists and is already migrated.
+`.env` is gitignored and must be created from `.env.example` (`composer setup` does this, plus `key:generate`). Without `APP_KEY` the feature test fails with `No application encryption key has been specified` — that is an unconfigured environment, not a code bug.
 
-`phpunit.xml` overrides the environment for tests: in-memory SQLite (`:memory:`), `array` session/cache, `sync` queue, `file` maintenance. No migrations run automatically — add `RefreshDatabase` per test as needed.
-
-Mail and broadcast are set to `log`/`null`. Nothing leaves the machine.
+Routing, middleware, and exception config all live in the `withRouting` / `withMiddleware` / `withExceptions` closures in `bootstrap/app.php`. There is no `RouteServiceProvider`. `withExceptions` already renders JSON for `api/*`.
 
 ## Conventions
 
-`.editorconfig` and `.gitattributes` enforce LF endings, 4-space indent, final newline, and trimmed trailing whitespace. `.gitattributes` sets per-type diff drivers (`.blade.php` as html, `.css` as css, `.php` as php), so read the rendered diff, not raw lines.
+`.editorconfig` enforces LF, 4-space indent, final newline, trimmed trailing whitespace. `.gitattributes` sets per-type diff drivers (`.blade.php` as html, `.css` as css), so read the rendered diff, not raw lines.
 
-Routing is registered in `bootstrap/app.php` via `withRouting(web: ...)`, not in a separate `RouteServiceProvider`. Middleware and exception config go in the `withMiddleware` / `withExceptions` closures there.
+No Prettier and no Blade formatter — match the surrounding generated-Blade indentation by hand. `vendor/bin/pint` covers PHP only and currently passes clean.
 
-No `.editorconfig`-adjacent formatter config for JS or Blade — there is no Prettier or Blade formatter. Match surrounding Blade indentation (4 spaces, blank line after each block tag) by hand.
+`.npmrc` sets `ignore-scripts=true`, so `npm install` runs no lifecycle scripts.
 
-## Git
+## Instruction-file caveat
 
-Branch `main`, single commit, remote `origin` -> `github.com/Wincie-SND/MovieREV.git`. `package-lock.json` is untracked (not gitignored) while `composer.lock` is committed, so npm installs resolve fresh.
+`CLAUDE.md` is untouched Laravel Boost boilerplate telling you to `composer require laravel/boost`. Boost is **not** installed. Ignore it — and if you ever install Boost, `php artisan boost:install` overwrites both `CLAUDE.md` and `AGENTS.md`, so merge rather than clobber.
