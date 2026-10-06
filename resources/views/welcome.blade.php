@@ -102,7 +102,7 @@ tailwind.config = {
 <img class="pointer-events-none absolute top-[366px] left-[31.5px] w-6 h-6" src="img/user.svg" />
 <button type="button" id="cta-top" aria-label="Get Started!" class="design-btn absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px] bg-[#d7d7d7] rounded-[16.5px]" ></button>
 <div class="pointer-events-none absolute top-[16.5px] left-[1683px] w-[159px] [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] leading-[102px] whitespace-nowrap" >Get Started!</div>
-<div class="absolute top-[16.5px] left-[1488px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap" >Sign In</div>
+<button type="button" id="sign-in" class="design-btn bg-transparent absolute top-[16.5px] left-[1488px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap" >Sign In</button>
 <div class="pointer-events-none absolute top-[292.5px] left-[936px] w-[396px] h-[87px] flex items-center justify-center [font-family:'Poppins-Bold',Helvetica] font-bold text-white text-[60px] text-center tracking-[0] leading-[86.4px]" >Get Started</div>
 <img class="left-[342px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-8.png" />
 <div class="absolute top-[31.5px] left-[169.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] tracking-[16.74px] leading-[102px] whitespace-nowrap" >MovieREV</div></div>
