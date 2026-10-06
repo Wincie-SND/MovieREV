@@ -96,13 +96,17 @@ The `fontaine` warning about `optimizedFallbacks` during `npm run build` is harm
 
 Dev DB is **MySQL via Laragon/phpMyAdmin** (commit 56af374): database `movierev`, user `root`, empty password, port 3306. It is migrated (users, password_reset_tokens, sessions, cache, cache_locks, jobs, job_batches, failed_jobs).
 
-Because `SESSION_DRIVER`, `CACHE_STORE`, and `QUEUE_CONNECTION` all default to `database`, **an unmigrated database makes every page 500** with `SQLSTATE[42S02] Table 'movierev.sessions' doesn't exist` — the `sessions` table is created by `0001_01_01_000000_create_users_table.php`, not a file of its own. Fix with `php artisan migrate`. The tests will *not* catch this: `phpunit.xml` forces `array` session/cache and in-memory SQLite, so they pass green while the real app is broken.
+**`database/` holds exactly one thing that matters: `database/movierev.sql`** — the complete schema (13 tables: framework + `movies`, `reviews`, `lists`, `list_movies`, `users`) plus the seeded test user. The stock Laravel `migrations/`, `seeders/`, and `factories/` folders were deliberately deleted (per the owner's preference for a one-file database); the app tables never had migrations anyway, so the dump is the **only** source of schema truth. Therefore:
 
-`phpunit.xml` overrides this for tests: `DB_CONNECTION=sqlite`, `:memory:`, with `array` session/cache and `sync` queue. No migrations run automatically — add `RefreshDatabase` per test as needed.
+- **`php artisan migrate` and `php artisan db:seed` no longer exist** (no files to run — `migrate` errors with a missing-directory exception). Schema/seed changes are made in phpMyAdmin, then re-exported over `database/movierev.sql` so the file stays in sync with the live DB.
+- **Recovery = import the file**: phpMyAdmin → select `movierev` → Import → `database/movierev.sql`, or `mysql -h 127.0.0.1 -u root movierev < database/movierev.sql`. Every section starts with `DROP TABLE IF EXISTS`, so re-importing is safe.
+- `composer setup` no longer runs `migrate` (the line was removed from `composer.json`); it only does `.env` + `key:generate` + npm. The `Database\\Factories\\` / `Database\\Seeders\\` PSR-4 entries were left in `composer.json` — harmless while the folders are absent, and regenerated classes autoload if the folders ever come back.
 
-`DatabaseSeeder` is idempotent (`updateOrCreate`), so `db:seed` can be re-run freely.
+Because `SESSION_DRIVER`, `CACHE_STORE`, and `QUEUE_CONNECTION` all default to `database`, **a database missing its tables makes every page 500** with `SQLSTATE[42S02] Table 'movierev.sessions' doesn't exist`. Fix by importing `database/movierev.sql`, not by migrating. The tests will *not* catch this: `phpunit.xml` forces `array` session/cache and in-memory SQLite, so they pass green while the real app is broken.
 
-`database/database.sqlite` does not exist and isn't tracked; nothing references it.
+`phpunit.xml` overrides this for tests: `DB_CONNECTION=sqlite`, `:memory:`, with `array` session/cache and `sync` queue. No migrations run, and with the migration files gone `RefreshDatabase` would just give you empty tables — current tests don't touch the DB.
+
+`database/database.sqlite` does not exist and isn't tracked; `database/.gitignore` (one line: `*.sqlite*`) keeps it that way. Nothing references it.
 
 ## Environment
 
