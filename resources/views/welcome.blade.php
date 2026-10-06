@@ -52,7 +52,9 @@ tailwind.config = {
 <div class="flex w-[291px] h-[51px] items-center gap-[var(--size-space-300)] pt-[var(--size-space-450)] pr-[var(--size-space-600)] pb-[var(--size-space-450)] pl-[var(--size-space-600)] absolute top-[490.5px] left-[340.5px] bg-color-background-default-default rounded-[var(--size-radius-full)] overflow-hidden border border-solid border-color-border-default-default" ><div class="relative flex-1 font-single-line-body-base font-[number:var(--single-line-body-base-font-weight)] text-color-text-default-tertiary text-[length:var(--single-line-body-base-font-size)] tracking-[var(--single-line-body-base-letter-spacing)] leading-[var(--single-line-body-base-line-height)] [font-style:var(--single-line-body-base-font-style)]" >Find a movie...</div>
 <img class="relative w-6 h-6" src="img/search.svg" /></div>
 <div class="absolute top-[168px] left-[886.5px] w-[493.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] text-center tracking-[16.74px] leading-[102px]" >Welcome!</div>
-<div class="absolute top-[273px] left-[832.5px] w-[603px] h-[127.5px] bg-[#6450a1] rounded-[34.5px]" ></div>
+@guest
+<a href="{{ route('register') }}" class="absolute top-[273px] left-[832.5px] w-[603px] h-[127.5px] bg-[#6450a1] rounded-[34.5px] no-underline hover:opacity-90" ><span class="absolute top-[19.5px] left-[103.5px] w-[396px] h-[87px] flex items-center justify-center [font-family:'Poppins-Bold',Helvetica] font-bold text-white text-[60px] text-center tracking-[0] leading-[86.4px]" >Get Started</span></a>
+@endguest
 <div class="absolute top-[178.5px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#727272] rounded-[16.5px]" ></div>
 <div class="absolute top-[237px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#d9d9d9] rounded-[16.5px]" ></div>
 <div class="absolute top-[210px] left-[67.5px] w-[129px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#1e1e1e] text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Movies</div>
@@ -63,10 +65,16 @@ tailwind.config = {
 <img class="absolute top-[307.5px] left-[31.5px] w-6 h-6" src="img/pen-tool.svg" />
 <img class="absolute top-[249px] left-[31.5px] w-6 h-6" src="img/monitor.svg" />
 <img class="absolute top-[366px] left-[31.5px] w-6 h-6" src="img/user.svg" />
-<div class="absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px] bg-[#d7d7d7] rounded-[16.5px]" ></div>
-<div class="absolute top-[16.5px] left-[1683px] w-[159px] [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] leading-[102px] whitespace-nowrap" >Get Started!</div>
-<div class="absolute top-[16.5px] left-[1488px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap" >Sign In</div>
-<div class="absolute top-[292.5px] left-[936px] w-[396px] h-[87px] flex items-center justify-center [font-family:'Poppins-Bold',Helvetica] font-bold text-white text-[60px] text-center tracking-[0] leading-[86.4px]" >Get Started</div>
+@guest
+<a href="{{ route('register') }}" class="absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px] bg-[#d7d7d7] rounded-[16.5px] no-underline hover:opacity-90" ><span class="absolute top-[-27px] left-[52.5px] w-[159px] [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] leading-[102px] whitespace-nowrap" >Get Started!</span></a>
+@endguest
+@guest
+<a href="{{ route('login') }}" class="absolute top-[16.5px] left-[1488px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap no-underline hover:opacity-80" >Sign In</a>
+@endguest
+@auth
+<div class="absolute top-[16.5px] left-[1488px] w-[112px] text-right [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap" >{{ Auth::user()->username }}</div>
+<form method="POST" action="{{ route('logout') }}" class="absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px]" >@csrf<button type="submit" class="w-full h-full bg-[#d7d7d7] border-0 rounded-[16.5px] cursor-pointer [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] hover:opacity-90" >Log Out</button></form>
+@endauth
 <img class="left-[342px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-8.png" />
 <div class="absolute top-[31.5px] left-[169.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] tracking-[16.74px] leading-[102px] whitespace-nowrap" >MovieREV</div></div>
 </body>
