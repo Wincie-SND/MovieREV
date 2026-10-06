@@ -49,7 +49,7 @@ tailwind.config = {
 <img class="left-[606px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-6.png" />
 <div class="absolute top-[610.5px] left-[342px] w-[1542px] h-px bg-[#d9d9d9]" ></div>
 <div class="absolute top-[540px] left-[342px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Trending</div>
-<div class="flex w-[291px] h-[51px] items-center gap-[var(--size-space-300)] pt-[var(--size-space-450)] pr-[var(--size-space-600)] pb-[var(--size-space-450)] pl-[var(--size-space-600)] absolute top-[490.5px] left-[340.5px] bg-color-background-default-default rounded-[var(--size-radius-full)] overflow-hidden border border-solid border-color-border-default-default" ><div class="relative flex-1 font-single-line-body-base font-[number:var(--single-line-body-base-font-weight)] text-color-text-default-tertiary text-[length:var(--single-line-body-base-font-size)] tracking-[var(--single-line-body-base-letter-spacing)] leading-[var(--single-line-body-base-line-height)] [font-style:var(--single-line-body-base-font-style)]" >Find a movie...</div>
+<div class="flex w-[291px] h-[51px] items-center gap-[var(--size-space-300)] pt-[var(--size-space-450)] pr-[var(--size-space-600)] pb-[var(--size-space-450)] pl-[var(--size-space-600)] absolute top-[490.5px] left-[340.5px] bg-color-background-default-default rounded-[var(--size-radius-full)] overflow-hidden border border-solid border-color-border-default-default" ><input type="text" placeholder="Find a movie..." aria-label="Find a movie" class="relative flex-1 min-w-0 appearance-none bg-transparent border-0 p-0 m-0 font-single-line-body-base font-[number:var(--single-line-body-base-font-weight)] text-[#1e1e1e] placeholder:text-color-text-default-tertiary text-[length:var(--single-line-body-base-font-size)] tracking-[var(--single-line-body-base-letter-spacing)] leading-[var(--single-line-body-base-line-height)] [font-style:var(--single-line-body-base-font-style)] outline-none focus:ring-1 focus:ring-[#6450a1]" />
 <img class="relative w-6 h-6" src="img/search.svg" /></div>
 <div class="absolute top-[168px] left-[886.5px] w-[493.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] text-center tracking-[16.74px] leading-[102px]" >Welcome!</div>
 @guest
@@ -76,6 +76,10 @@ tailwind.config = {
 <form method="POST" action="{{ route('logout') }}" class="absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px]" >@csrf<button type="submit" class="w-full h-full bg-[#d7d7d7] border-0 rounded-[16.5px] cursor-pointer [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] hover:opacity-90" >Log Out</button></form>
 @endauth
 <img class="left-[342px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-8.png" />
-<div class="absolute top-[31.5px] left-[169.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] tracking-[16.74px] leading-[102px] whitespace-nowrap" >MovieREV</div></div>
+<div class="absolute top-[31.5px] left-[169.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] tracking-[16.74px] leading-[102px] whitespace-nowrap" >MovieREV</div>
+<a href="{{ route('home') }}" aria-label="Home" class="absolute top-[178.5px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
+<a href="{{ route('home') }}" aria-label="Movies" class="absolute top-[237px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
+<a href="{{ route('home') }}" aria-label="Lists" class="absolute top-[295.5px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
+<a href="{{ route('home') }}" aria-label="Reviews" class="absolute top-[354px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a></div>
 </body>
 </html>
