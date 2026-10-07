@@ -14,8 +14,10 @@
 -- lists.user_id and reviews.user_id are bigint unsigned to match
 -- users.id, which is what MySQL requires of an FK column.
 --
--- Schema-only apart from one seeded user and the 3 migration rows;
--- movierev.sql itself contained no INSERTs.
+-- Data apart from the 3 migration rows: only `users` (the seeded test
+-- user, plus accounts created through the register form — re-export the
+-- users INSERTs after new sign-ups so this file stays in sync). The
+-- original movierev.sql contained no INSERTs.
 --
 -- To import: select the `movierev` database in phpMyAdmin and use Import,
 -- or from a shell:
@@ -393,7 +395,7 @@ CREATE TABLE `users` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `users_email_unique` (`email`),
   UNIQUE KEY `users_username_unique` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -403,6 +405,8 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES (1,'Test User','test@example.com','2026-10-06 01:13:33','$2y$12$RuiAuQs0oJGSDVZkh1i5Q./.TI2socpctzDzTawpVHuFGdgJCShNS','f1l4Ysy6wI','bartoletti.maxie','user','2026-10-06 01:13:32','2026-10-06 01:13:33');
+INSERT INTO `users` VALUES (2,'Jesse Rivera','jes@example.com',NULL,'$2y$12$0um933qGXk0/1E3don7Eje1rTy2EPUVj/kqcfpO0lON0vax1aeUYS',NULL,'jes_','user','2026-10-06 12:02:53','2026-10-06 12:02:53');
+INSERT INTO `users` VALUES (3,'Wincie Jade Breva','brevawinciejade@gmail.com',NULL,'$2y$12$Z/IuBQ1yBjn6v6MmI3LmduKlSa2JboNT2pEFwTbx5Z5aAmB2BpAWO',NULL,'wnc','user','2026-10-06 17:54:37','2026-10-06 17:54:37');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

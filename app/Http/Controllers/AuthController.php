@@ -37,7 +37,7 @@ class AuthController extends Controller
 
         if (! Auth::attempt(
             [$field => $credentials['identifier'], 'password' => $credentials['password']],
-            $request->boolean('remember'),
+            true, // always remember: keep the account signed in across refreshes/restarts
         )) {
             throw ValidationException::withMessages([
                 'identifier' => 'These credentials do not match our records.',
@@ -82,7 +82,7 @@ class AuthController extends Controller
         // to the column default ('user') since we never pass it here.
         $user = User::create($credentials);
 
-        Auth::login($user);
+        Auth::login($user, true); // always remember, so a refresh keeps them signed in
 
         $request->session()->regenerate();
 
