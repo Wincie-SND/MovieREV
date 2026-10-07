@@ -25,7 +25,7 @@
                     id="identifier"
                     name="identifier"
                     value="{{ old('identifier') }}"
-                    placeholder="bartoletti.maxie or you@example.com"
+                    placeholder="randomuser or email@example.com"
                     autocomplete="username"
                     autofocus
                     class="w-full h-[54px] px-[18px] bg-[#1f142f] border border-solid border-[#3f2860] rounded-[16.5px] [font-family:'Roboto',Helvetica] text-white text-[22.5px] outline-none focus:border-[#6450a1]"

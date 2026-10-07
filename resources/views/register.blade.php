@@ -42,7 +42,7 @@
                     id="username"
                     name="username"
                     value="{{ old('username') }}"
-                    placeholder="bartoletti.maxie"
+                    placeholder="randomuser"
                     autocomplete="username"
                     class="w-full h-[54px] px-[18px] bg-[#1f142f] border border-solid border-[#3f2860] rounded-[16.5px] [font-family:'Roboto',Helvetica] text-white text-[22.5px] outline-none focus:border-[#6450a1]"
                 />
@@ -58,7 +58,7 @@
                     id="email"
                     name="email"
                     value="{{ old('email') }}"
-                    placeholder="you@example.com"
+                    placeholder="email@example.com"
                     autocomplete="email"
                     class="w-full h-[54px] px-[18px] bg-[#1f142f] border border-solid border-[#3f2860] rounded-[16.5px] [font-family:'Roboto',Helvetica] text-white text-[22.5px] outline-none focus:border-[#6450a1]"
                 />
