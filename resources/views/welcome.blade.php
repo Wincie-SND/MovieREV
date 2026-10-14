@@ -182,7 +182,7 @@
         <section id="reviews-week" aria-labelledby="popular-reviews-heading" class="mt-12">
             <div class="flex items-end justify-between gap-4">
                 <h2 id="popular-reviews-heading" class="font-bebas text-4xl tracking-wide">Popular Reviews This Week</h2>
-                <a href="#reviews-week" class="no-underline text-xs font-bold uppercase tracking-[0.18em] text-red-400 hover:text-red-300 hover:underline">See More &gt;</a>
+                <a href="#reviews-week" class="no-underline text-xs font-bold uppercase tracking-[0.18em] text-red-400 transition-colors hover:text-red-300">See More &gt;</a>
             </div>
             <div class="mt-4 grid gap-4 md:grid-cols-2">
                 @forelse ($recentReviews as $review)

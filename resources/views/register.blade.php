@@ -170,7 +170,7 @@
 
             <p class="m-0 text-center pt-[26px] pb-[26px] text-stone-300 text-[8px] font-bold tracking-[0.5px] [font-family:'Inter',Helvetica,sans-serif]">
                 Already have an account?
-                <a href="{{ route('login') }}" class="text-red-500 no-underline hover:underline">Sign In</a>
+                <a href="{{ route('login') }}" class="text-red-500 no-underline transition-colors hover:text-red-400">Sign In</a>
             </p>
         </form>
     </div>

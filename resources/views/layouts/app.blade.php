@@ -45,9 +45,9 @@
 
         `preflight: false` means Tailwind never applies its `a { text-decoration:
         inherit }` base rule, so every anchor keeps the browser's default
-        underline. Kill it globally here; the `hover:underline` utility is a
-        class selector and still outranks this element selector, so deliberate
-        hover underlines keep working.
+        underline. Kill it globally here. `!important` is deliberate: it makes
+        the reset authoritative so no later utility can reintroduce an
+        underline by accident.
     --}}
     <style>
         html, body {
@@ -58,7 +58,7 @@
         a,
         button,
         [role="button"] {
-            text-decoration: none;
+            text-decoration: none !important;
         }
     </style>
 </head>
