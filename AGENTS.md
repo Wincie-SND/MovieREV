@@ -92,9 +92,30 @@ The view no longer calls `@vite`, so nothing currently depends on this directory
 
 The `fontaine` warning about `optimizedFallbacks` during `npm run build` is harmless.
 
+## Docker (dev)
+
+`docker/docker-compose.yml` runs the whole stack: `app` (PHP 8.3 + `php artisan serve` on `:8000`), `db` (MySQL 8.4, host port `:3307`), and `phpmyadmin` (`:8080`).
+
+```powershell
+docker compose -f docker/docker-compose.yml up -d        # start / recreate
+docker compose -f docker/docker-compose.yml down         # stop (keeps volumes)
+docker compose -f docker/docker-compose.yml down -v      # stop and wipe db_data + vendor
+```
+
+- The repo is **bind-mounted** into `app` (`..:/var/www/html`), so editor changes are served live — no rebuild. `vendor/` is a separate named volume holding the image's Linux install, so **composer/npm changes need `down` + `up --build`**.
+- Compose resolves relative paths against `docker/`; the build context is `..` (repo root) with `dockerfile: docker/dockerfile`.
+
 ## Database
 
-Dev DB is **MySQL via Laragon/phpMyAdmin** (commit 56af374): database `movierev`, user `root`, empty password, port 3306. The **live database has the 5 application tables** — `users`, `movies`, `reviews`, `lists`, `list_movies` — and nothing else. The 8 Laravel framework tables (`sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`, `password_reset_tokens`, `migrations`) were dropped, and the app was moved off them (see below), so they are not required.
+Dev DB is **MySQL 8.4 in Docker** (`docker/docker-compose.yml`, service `db`): database `movierev`, user `root`, password `secret`, published on host port **3307** (3306 is left free for Laragon's MySQL, which the app no longer uses). The container seeds itself from `database/movierev.sql` the first time it starts against an empty `db_data` volume. **phpMyAdmin is part of the stack at `http://localhost:8080`** (`PMA_HOST=db`) and is the tool for schema/seed edits. `.env` / `.env.example` point at it: `DB_HOST=127.0.0.1`, `DB_PORT=3307`, `DB_PASSWORD=secret` (the `app` container overrides these with `DB_HOST=db`, port `3306`).
+
+Start the DB before a host-run `php artisan serve`, or it 500s with `SQLSTATE[HY000] [2002]`:
+
+```powershell
+docker compose -f docker/docker-compose.yml up -d db
+```
+
+The **live database has the 5 application tables** — `users`, `movies`, `reviews`, `lists`, `list_movies` — and nothing else. The 8 Laravel framework tables (`sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`, `password_reset_tokens`, `migrations`) were dropped, and the app was moved off them (see below), so they are not required.
 
 **`database/` holds exactly one thing: `database/movierev.sql` — a phpMyAdmin export of only the 5 application tables**, kept in sync with the live DB. The stock Laravel `migrations/`, `seeders/`, and `factories/` folders were deliberately deleted (the owner prefers a one-file database), so nothing in this repo can recreate framework tables. Therefore:
 
