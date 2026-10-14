@@ -53,6 +53,7 @@
 
             <div class="flex items-center gap-3">
                 @guest
+                    <a href="{{ route('register') }}" class="no-underline rounded-full border border-white/20 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-white/10 hover:text-red-400 hover:no-underline">Sign Up</a>
                     <a href="{{ route('login') }}" class="no-underline rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Log In</a>
                 @else
                     @if (auth()->user()?->usertype === 'admin')

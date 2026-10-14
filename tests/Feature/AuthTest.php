@@ -28,7 +28,15 @@ class AuthTest extends TestCase
             ->assertStatus(200)
             ->assertSee('MovieREV home', false)
             ->assertSee('Recently Reviewed')
-            ->assertSee('Log In');
+            ->assertSee('Log In')
+            ->assertSee('Sign Up');
+    }
+
+    public function test_home_page_sign_up_button_points_at_the_register_form(): void
+    {
+        $this->get('/')
+            ->assertStatus(200)
+            ->assertSee('href="'.route('register').'"', false);
     }
 
     public function test_logout_requires_an_authenticated_user(): void
