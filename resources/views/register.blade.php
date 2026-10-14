@@ -3,12 +3,17 @@
 @section('title', 'Sign Up — MovieREV')
 
 @section('content')
-<div class="min-h-screen w-full relative overflow-hidden flex items-center justify-center [background:linear-gradient(270deg,#000000_10%,#4a044e_41%,#000000_85%)]">
+<div class="min-h-screen w-full relative flex [background:linear-gradient(270deg,#000000_10%,#4a044e_41%,#000000_85%)]">
 
-    <div class="relative w-[1201px] h-[670px] shrink-0">
+    {{-- `m-auto` centres the fixed 1201x670 frame when there is room, and lets the
+         page scroll to it when the viewport is smaller (flex `justify-center`
+         would make the overflowing edge unreachable). --}}
+    <div class="m-auto relative w-[1201px] h-[670px] shrink-0">
 
-        {{-- Ambient still, bled in at 10% opacity --}}
-        <img class="absolute left-0 top-[-401px] w-[1267px] h-[1472px] opacity-10 object-cover pointer-events-none select-none" src="{{ asset('img/image-4.png') }}" alt=""/>
+        {{-- Ambient still, bled in at 10% opacity and clipped to the frame --}}
+        <div class="absolute inset-0 overflow-hidden">
+            <img class="absolute left-0 top-[-401px] w-[1267px] h-[1472px] opacity-10 object-cover pointer-events-none select-none" src="{{ asset('img/image-4.png') }}" alt=""/>
+        </div>
 
         {{-- Hero copy --}}
         <h1 class="absolute left-[14px] top-[283px] m-0 text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">
@@ -19,12 +24,30 @@
 
         {{-- Sign-up card --}}
         <form method="POST" action="{{ route('register.store') }}"
-              class="absolute left-[659px] top-[88px] w-[455px] h-[496px] bg-zinc-950 overflow-hidden">
+              class="absolute left-[659px] top-[88px] w-[455px] min-h-[496px] bg-zinc-950 flex flex-col">
             @csrf
 
             <h2 class="m-0 pt-[6px] pl-[41px] w-[384px] text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">Create your account</h2>
 
             <div class="flex flex-col gap-[9px] pl-[52px] pt-[40px]">
+                {{-- Name --}}
+                <div>
+                    <label for="name" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Name</label>
+                    <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        value="{{ old('name') }}"
+                        placeholder="Your name"
+                        autocomplete="name"
+                        autofocus
+                        class="w-80 h-8 bg-stone-800 border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                    />
+                    @error('name')
+                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                    @enderror
+                </div>
+
                 {{-- Email --}}
                 <div>
                     <label for="email" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Email</label>
@@ -35,7 +58,6 @@
                         value="{{ old('email') }}"
                         placeholder="you@example.com"
                         autocomplete="email"
-                        autofocus
                         class="w-80 h-8 bg-stone-800 border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                     />
                     @error('email')
@@ -129,7 +151,7 @@
                 <button type="submit" class="mt-[5px] w-80 h-14 bg-red-500 hover:bg-red-600 border-0 cursor-pointer text-white text-xs font-bold [font-family:'Inter',Helvetica,sans-serif]">Sign Up</button>
             </div>
 
-            <p class="absolute left-[150px] top-[415px] m-0 text-stone-300 text-[8px] font-bold tracking-[0.5px] [font-family:'Inter',Helvetica,sans-serif]">
+            <p class="m-0 pl-[150px] pt-[51px] pb-[30px] text-stone-300 text-[8px] font-bold tracking-[0.5px] [font-family:'Inter',Helvetica,sans-serif]">
                 Already have an account?
                 <a href="{{ route('login') }}" class="text-red-500 no-underline hover:underline">Sign In</a>
             </p>
