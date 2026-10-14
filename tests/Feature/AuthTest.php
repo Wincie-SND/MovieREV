@@ -8,7 +8,10 @@ class AuthTest extends TestCase
 {
     public function test_login_page_loads_for_guests(): void
     {
-        $this->get('/login')->assertStatus(200)->assertSee('Username or Email');
+        $this->get('/login')
+            ->assertStatus(200)
+            ->assertSee('Email or Username')
+            ->assertSee('Password');
     }
 
     public function test_register_page_loads_for_guests(): void
