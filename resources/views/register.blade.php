@@ -5,6 +5,18 @@
 @section('content')
 <div class="min-h-screen w-full relative flex [background:linear-gradient(270deg,#000000_10%,#4a044e_41%,#000000_85%)]">
 
+    {{-- Page backdrop. The still is tilted and oversized so the rotation never exposes
+         a corner; the wrapper's `overflow-hidden` clips that overscan. `fixed` (not
+         `absolute`) keeps it covering the viewport even when the layout's 100vh vs
+         scrollbar mismatch allows a few px of scroll. Vignette pulls the edges down.
+         The frame below is positioned and later in tree order, so it paints on top
+         without needing a z-index. --}}
+    <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+        <img src="{{ asset('img/forms_background.jpg') }}" alt=""
+             class="absolute left-1/2 top-1/2 h-[150%] w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2 -rotate-3 object-cover opacity-[0.28]"/>
+        <div class="absolute inset-0 [background:radial-gradient(ellipse_at_center,rgba(0,0,0,0)_35%,rgba(0,0,0,0.5)_75%,rgba(0,0,0,0.88)_100%)]"></div>
+    </div>
+
     {{-- `m-auto` centres the fixed 1201x670 frame when there is room, and lets the
          page scroll to it when the viewport is smaller (flex `justify-center`
          would make the overflowing edge unreachable). --}}
@@ -24,12 +36,17 @@
 
         {{-- Sign-up card --}}
         <form method="POST" action="{{ route('register.store') }}"
-              class="absolute left-[659px] top-[88px] w-[455px] min-h-[496px] bg-zinc-950 flex flex-col">
+              class="absolute left-[659px] top-[70px] w-[455px] min-h-[575px] bg-[#150017] rounded-xl flex flex-col">
             @csrf
 
-            <h2 class="m-0 pt-[6px] pl-[41px] w-[384px] text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">Create your account</h2>
+            {{-- Brand mark. The PNG is a 500x500 canvas with ~12% transparent padding
+                 on every side, so a 72px box renders the mark itself at ~56px. --}}
+            <img src="{{ asset('img/logo.png') }}" alt="MovieREV"
+                 class="mx-auto mt-[22px] block w-[72px] h-[72px] shrink-0 object-contain"/>
 
-            <div class="flex flex-col gap-[9px] pl-[52px] pt-[40px]">
+            <h2 class="m-0 pt-[10px] text-center text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">Create your account</h2>
+
+            <div class="flex flex-col items-center gap-[9px] pt-[24px]">
                 {{-- Name --}}
                 <div>
                     <label for="name" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Name</label>
@@ -41,7 +58,7 @@
                         placeholder="Your name"
                         autocomplete="name"
                         autofocus
-                        class="w-80 h-8 bg-stone-800 border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                     />
                     @error('name')
                         <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
@@ -58,7 +75,7 @@
                         value="{{ old('email') }}"
                         placeholder="you@example.com"
                         autocomplete="email"
-                        class="w-80 h-8 bg-stone-800 border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                     />
                     @error('email')
                         <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
@@ -75,7 +92,7 @@
                         value="{{ old('username') }}"
                         placeholder="username"
                         autocomplete="username"
-                        class="w-80 h-8 bg-stone-800 border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                     />
                     @error('username')
                         <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
@@ -92,7 +109,7 @@
                             name="password"
                             placeholder="At least 8 characters"
                             autocomplete="new-password"
-                            class="w-80 h-8 bg-stone-800 border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                         />
                         <button
                             type="button"
@@ -125,7 +142,7 @@
                             name="password_confirmation"
                             placeholder="Re enter password"
                             autocomplete="new-password"
-                            class="w-80 h-8 bg-stone-800 border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                         />
                         <button
                             type="button"
@@ -151,7 +168,7 @@
                 <button type="submit" class="mt-[5px] w-80 h-14 bg-red-500 hover:bg-red-600 border-0 cursor-pointer text-white text-xs font-bold [font-family:'Inter',Helvetica,sans-serif]">Sign Up</button>
             </div>
 
-            <p class="m-0 pl-[150px] pt-[51px] pb-[30px] text-stone-300 text-[8px] font-bold tracking-[0.5px] [font-family:'Inter',Helvetica,sans-serif]">
+            <p class="m-0 text-center pt-[26px] pb-[26px] text-stone-300 text-[8px] font-bold tracking-[0.5px] [font-family:'Inter',Helvetica,sans-serif]">
                 Already have an account?
                 <a href="{{ route('login') }}" class="text-red-500 no-underline hover:underline">Sign In</a>
             </p>
