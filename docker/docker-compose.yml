@@ -17,6 +17,13 @@ services:
       DB_USERNAME: root
       DB_PASSWORD: secret
 
+    # Live-mount the source so edits show up without rebuilding the image
+    # (the image only COPYs the code at build time). `vendor/` gets its own
+    # volume so the image's Linux install isn't shadowed by the host's.
+    volumes:
+      - ..:/var/www/html
+      - vendor:/var/www/html/vendor
+
     depends_on:
       db:
         condition: service_healthy
@@ -39,3 +46,4 @@ services:
 
 volumes:
   db_data:
+  vendor:
