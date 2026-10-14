@@ -1,106 +1,208 @@
-<!DOCTYPE html>
-<html>
-<head> 
-  <title>MovieREV</title>
-  <link rel="icon" type="image/png" href="{{ asset('img/1449066-1.png') }}">
-</head>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<meta charset="utf-8" />
-<link rel="stylesheet" href="globals.css">
-<link rel="stylesheet" href="styleguide.css">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@700&family=Roboto:wght@500&display=swap" rel="stylesheet">
-<script src="https://cdn.tailwindcss.com"></script>
-<script>
-/** @type {import('tailwindcss').Config} */
-tailwind.config = {
-  
-  corePlugins: {
-    preflight: false,
-  },
-  theme: {
-    extend: {
-      
-      colors:{
-        "color-background-default-default": "var(--color-background-default-default)",
-      "color-border-default-default": "var(--color-border-default-default)",
-      "color-primitives-gray-300": "var(--color-primitives-gray-300)",
-      "color-primitives-gray-400": "var(--color-primitives-gray-400)",
-      "color-primitives-white-1000": "var(--color-primitives-white-1000)",
-      "color-text-default-tertiary": "var(--color-text-default-tertiary)",
-      
-      },fontFamily:{
-        "single-line-body-base": "var(--single-line-body-base-font-family)",
-      
-      },},
-  },
-  plugins: [],
-}
-        </script>
-</head>
-<body>
-<div class="bg-white overflow-hidden border-0 border-none w-full min-w-[1920px] h-[1080px] relative" ><div class="absolute top-0 left-0 w-[1920px] h-[1080px] [background:linear-gradient(180deg,rgba(31,20,47,1)_30%,rgba(73,46,110,1)_100%)]" ></div>
-<div class="absolute top-[354px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#d9d9d9] rounded-[16.5px]" ></div>
-<div class="absolute top-[327px] left-[67.5px] w-[129px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#1e1e1e] text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Reviews</div>
-<img class="absolute top-0 left-0 w-[150px] h-[148.5px] object-contain" src="img/1449066-1.png" />
-<div class="absolute top-[148.5px] left-[282px] w-[1702.5px] h-[987px] bg-[#241538] rounded-[37.5px] border border-solid border-[#3f2860]" ></div>
-@guest
-<img class="left-[1662px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-2.png" />
-<img class="left-[1398px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-3.png" />
-<img class="left-[1134px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-5.png" />
-<img class="left-[870px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-4.png" />
-<img class="left-[606px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-6.png" />
-<div class="absolute top-[610.5px] left-[342px] w-[1542px] h-px bg-[#d9d9d9]" ></div>
-<div class="absolute top-[540px] left-[342px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Trending</div>
-<img class="left-[342px] absolute top-[642px] w-[214.5px] h-[321px] object-cover" src="img/image-8.png" />
-@endguest
-@auth
-<img class="left-[342px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-4.png" />
-<img class="left-[606px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-5.png" />
-<img class="left-[870px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-6.png" />
-<img class="left-[1134px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-2.png" />
-<img class="left-[1398px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-3.png" />
-<img class="left-[1662px] absolute top-[419px] w-[214.5px] h-[321px] object-cover" src="img/image-8.png" />
-<div class="absolute top-[394px] left-[342px] w-[1542px] h-px bg-[#d9d9d9]" ></div>
-<div class="absolute top-[312px] left-[342px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >New Movies</div>
-@endauth
-@guest
-<div class="flex w-[291px] h-[51px] items-center gap-[var(--size-space-300)] pt-[var(--size-space-450)] pr-[var(--size-space-600)] pb-[var(--size-space-450)] pl-[var(--size-space-600)] absolute top-[490.5px] left-[340.5px] bg-color-background-default-default rounded-[var(--size-radius-full)] overflow-hidden border border-solid border-color-border-default-default" ><input type="text" placeholder="Find a movie..." aria-label="Find a movie" class="relative flex-1 min-w-0 appearance-none bg-transparent border-0 p-0 m-0 font-single-line-body-base font-[number:var(--single-line-body-base-font-weight)] text-[#1e1e1e] placeholder:text-color-text-default-tertiary text-[length:var(--single-line-body-base-font-size)] tracking-[var(--single-line-body-base-letter-spacing)] leading-[var(--single-line-body-base-line-height)] [font-style:var(--single-line-body-base-font-style)] outline-none focus:ring-1 focus:ring-[#6450a1]" />
-<img class="relative w-6 h-6" src="img/search.svg" /></div>
-<div class="absolute top-[168px] left-[886.5px] w-[493.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] text-center tracking-[16.74px] leading-[102px]" >Welcome!</div>
-@endguest
-@auth
-<div class="absolute top-[196px] left-[282px] w-[1702.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[35px] text-center tracking-[10.5px] leading-[49px] whitespace-nowrap" >Welcome {{ Auth::user()->username }}. Here's what we've been watching ...</div>
-@endauth
-@guest
-<a href="{{ route('register') }}" class="absolute top-[273px] left-[832.5px] w-[603px] h-[127.5px] bg-[#6450a1] rounded-[34.5px] no-underline hover:opacity-90" ><span class="absolute top-[19.5px] left-[103.5px] w-[396px] h-[87px] flex items-center justify-center [font-family:'Poppins-Bold',Helvetica] font-bold text-white text-[60px] text-center tracking-[0] leading-[86.4px]" >Get Started</span></a>
-@endguest
-<div class="absolute top-[178.5px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#727272] rounded-[16.5px]" ></div>
-<div class="absolute top-[237px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#d9d9d9] rounded-[16.5px]" ></div>
-<div class="absolute top-[210px] left-[67.5px] w-[129px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#1e1e1e] text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Movies</div>
-<div class="absolute top-[295.5px] left-[13.5px] w-[256.5px] h-[46.5px] bg-[#d9d9d9] rounded-[16.5px]" ></div>
-<div class="absolute top-[268.5px] left-[67.5px] w-[102px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#1e1e1e] text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Lists</div>
-<div class="absolute top-[151.5px] left-[67.5px] w-[82.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-[#d9d9d9] text-[22.5px] tracking-[6.98px] leading-[102px] whitespace-nowrap" >Home</div>
-<img class="absolute top-[190.5px] left-[31.5px] w-6 h-6" src="img/home.svg" />
-<img class="absolute top-[307.5px] left-[31.5px] w-6 h-6" src="img/pen-tool.svg" />
-<img class="absolute top-[249px] left-[31.5px] w-6 h-6" src="img/monitor.svg" />
-<img class="absolute top-[366px] left-[31.5px] w-6 h-6" src="img/user.svg" />
-@guest
-<a href="{{ route('register') }}" class="absolute top-[43.5px] left-[1630.5px] w-[264px] h-[46.5px] bg-[#d7d7d7] rounded-[16.5px] no-underline hover:opacity-90" ><span class="absolute top-[-27px] left-[52.5px] w-[159px] [font-family:'Roboto-Medium',Helvetica] font-medium text-black text-[18px] tracking-[5.58px] leading-[102px] whitespace-nowrap" >Get Started!</span></a>
-@endguest
-@guest
-<a href="{{ route('login') }}" class="absolute top-[16.5px] left-[1488px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap no-underline hover:opacity-80" >Sign In</a>
-@endguest
-@auth
-<div class="absolute top-[16.5px] left-[1492px] w-[241px] text-right [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap" >{{ Auth::user()->username }}</div>
-<img class="absolute top-[34px] left-[1693px] w-[60px] h-[60px] rounded-full object-cover" src="img/avatar.svg" alt="" />
-<form method="POST" action="{{ route('logout') }}" class="absolute top-[16.5px] left-[1673px] w-[208px] text-right" >@csrf<button type="submit" title="Log out" aria-label="Log out" class="w-full bg-transparent border-0 p-0 m-0 text-right cursor-pointer [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[30px] tracking-[3px] leading-[102px] whitespace-nowrap hover:opacity-80" >Logout</button></form>
-@endauth
-<div class="absolute top-[31.5px] left-[169.5px] [font-family:'Roboto-Medium',Helvetica] font-medium text-white text-[54px] tracking-[16.74px] leading-[102px] whitespace-nowrap" >MovieREV</div>
-<a href="{{ route('home') }}" aria-label="Home" class="absolute top-[178.5px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
-<a href="{{ route('home') }}" aria-label="Movies" class="absolute top-[237px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
-<a href="{{ route('home') }}" aria-label="Lists" class="absolute top-[295.5px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a>
-<a href="{{ route('home') }}" aria-label="Reviews" class="absolute top-[354px] left-[13.5px] w-[256.5px] h-[46.5px] rounded-[16.5px] no-underline cursor-pointer hover:bg-white/10" ></a></div>
-</body>
-</html>
+@extends('layouts.app')
+
+@section('title', 'Dashboard — MovieREV')
+
+@section('content')
+{{--
+    Film grain is declared as plain CSS rather than a Tailwind arbitrary value:
+    the SVG data URI is full of characters (`%`, `'`, `#`) that Tailwind's
+    arbitrary-value parser would mangle.
+--}}
+<style>
+    .dashboard-grain {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='grain'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23grain)'/%3E%3C/svg%3E");
+    }
+</style>
+
+<div id="top" class="relative min-h-screen text-white [background:linear-gradient(180deg,#0a040f_0%,#13051b_46%,#07040c_100%)]">
+    {{-- Cinematic page backdrop: the same tilted still as the auth pages, drained
+         to a texture and lit by two coloured spotlights, then reined in by a
+         vignette and grain. `fixed` + `pointer-events-none` keeps it off the
+         scroll and out of the way of clicks; it is first in tree order, so every
+         positioned sibling below (`header`, `main`) paints on top of it. --}}
+    <div class="pointer-events-none fixed inset-0 overflow-hidden" aria-hidden="true">
+        <img src="{{ asset('img/forms_background.jpg') }}" alt=""
+             class="absolute left-1/2 top-1/2 h-[150%] w-[150%] max-w-none -translate-x-1/2 -translate-y-1/2 -rotate-3 object-cover opacity-[0.12]" />
+        <div class="absolute inset-0 [background:radial-gradient(58%_42%_at_15%_0%,rgba(239,68,68,0.22),transparent_62%),radial-gradient(52%_46%_at_100%_6%,rgba(168,85,247,0.18),transparent_64%)]"></div>
+        <div class="absolute inset-0 [background:radial-gradient(ellipse_at_center,rgba(0,0,0,0)_36%,rgba(0,0,0,0.55)_76%,rgba(0,0,0,0.92)_100%)]"></div>
+        <div class="dashboard-grain absolute inset-0 opacity-[0.05] mix-blend-overlay"></div>
+    </div>
+
+    <header class="sticky top-0 z-40 border-b border-red-600/50 bg-gradient-to-b from-black/95 via-black/80 to-black/55 shadow-[0_18px_40px_-26px_rgba(239,68,68,0.6)] backdrop-blur">
+        <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3">
+            <a href="{{ route('home') }}" class="flex items-center gap-2" aria-label="MovieREV home">
+                <img src="{{ asset('img/logo.png') }}" alt="" class="h-8 w-8 object-contain" />
+                <span class="font-bebas text-2xl tracking-[0.16em]">MOVIE<span class="text-red-500">REV</span></span>
+            </a>
+
+            <nav class="hidden items-center gap-5 text-xs font-bold tracking-[0.18em] text-stone-300 md:flex" aria-label="Primary">
+                <a href="#top" class="text-white hover:text-red-400">Home</a>
+                <a href="#films" class="hover:text-red-400">Films</a>
+                <a href="#featured" class="hover:text-red-400">Teasers</a>
+            </nav>
+
+            <form method="GET" action="{{ route('home') }}" role="search" class="ml-auto flex min-w-[180px] flex-1 items-center gap-2 rounded-full border border-white/10 bg-[#2A0A2E] py-1 pl-3 pr-1 sm:max-w-xs">
+                <label for="dashboard-search" class="sr-only">Search movies</label>
+                <svg class="h-4 w-4 shrink-0 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-3.8-3.8M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" />
+                </svg>
+                <input id="dashboard-search" name="q" type="search" value="{{ $search }}" placeholder="Search movies" autocomplete="off" class="h-7 w-full bg-transparent text-sm text-white outline-none placeholder:text-stone-400" />
+                <button type="submit" class="sr-only">Search</button>
+            </form>
+
+            <div class="flex items-center gap-3">
+                @guest
+                    <a href="{{ route('login') }}" class="rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white hover:bg-red-600">Log In</a>
+                @else
+                    @if (auth()->user()?->usertype === 'admin')
+                        <a href="{{ route('admin.movies.index') }}" class="rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] hover:bg-white/20">Manage Movies</a>
+                    @endif
+                    <span class="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 sm:flex">
+                        <span aria-hidden="true" class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
+                        <span class="max-w-[120px] truncate">{{ Auth::user()->username }}</span>
+                    </span>
+                    <form method="POST" action="{{ route('logout') }}" class="m-0">
+                        @csrf
+                        <button type="submit" class="rounded-full border border-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] hover:bg-white/10">Log Out</button>
+                    </form>
+                @endguest
+            </div>
+        </div>
+    </header>
+
+    <main class="relative mx-auto w-full max-w-6xl px-4 pb-16">
+        @if ($search !== '')
+            <p class="mt-6 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-200 backdrop-blur-sm">
+                Showing catalog matches for <strong class="text-white">“{{ $search }}”</strong>.
+                @if (! $featuredMovie && $popularMovies->isEmpty() && $recentReviews->isEmpty())
+                    No matches were found, so placeholder slots are shown below.
+                @endif
+            </p>
+        @endif
+
+        <section id="featured" aria-label="Featured movie" class="mt-6 overflow-hidden rounded-2xl border border-white/10 bg-[#10020d]/85 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.9)] backdrop-blur-sm">
+            @if ($featuredMovie)
+                @php($featuredPoster = $featuredMovie->posterSource())
+                <div class="grid md:grid-cols-[minmax(0,5fr)_minmax(0,7fr)]">
+                    <div class="relative min-h-[280px] overflow-hidden md:min-h-[360px]">
+                        @if ($featuredPoster)
+                            <img src="{{ str_starts_with($featuredPoster, 'http') ? $featuredPoster : asset(ltrim($featuredPoster, '/')) }}" alt="{{ $featuredMovie->title }} featured art" class="absolute inset-0 h-full w-full object-cover" />
+                        @else
+                            <div class="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,rgba(239,68,68,0.28),transparent_45%),linear-gradient(135deg,#2a0a2e,#0b020d_70%)]" aria-hidden="true"></div>
+                            <div class="absolute inset-0 flex flex-col items-center justify-center gap-2 p-6 text-center">
+                                <p class="font-bebas text-5xl tracking-[0.12em] text-white/25">{{ \Illuminate\Support\Str::limit(mb_strtoupper($featuredMovie->title), 22) }}</p>
+                                <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-white/45">Featured art placeholder</p>
+                            </div>
+                        @endif
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#10020d] via-transparent to-transparent md:bg-gradient-to-r" aria-hidden="true"></div>
+                    </div>
+                    <div class="flex flex-col justify-center p-6 sm:p-10">
+                        <p class="font-bebas text-sm tracking-[0.28em] text-red-500">Featured</p>
+                        <h1 class="mt-1 font-bebas text-6xl leading-[0.95] tracking-wide sm:text-7xl">{{ $featuredMovie->title }}</h1>
+                        <p class="mt-2 text-xs uppercase tracking-[0.18em] text-stone-300">
+                            {{ $featuredMovie->release_year ?? 'Year TBD' }}
+                            @if ($featuredMovie->genre)
+                                • {{ $featuredMovie->genre }}
+                            @endif
+                            • ★ {{ number_format((float) ($featuredMovie->average_rating ?? 0), 1) }}
+                        </p>
+                        <p class="mt-4 max-w-xl text-sm leading-relaxed text-stone-200">
+                            {{ $featuredMovie->description ? \Illuminate\Support\Str::limit($featuredMovie->description, 240) : 'A full description has not been entered yet. This slot keeps the hero layout intact until an administrator adds one.' }}
+                        </p>
+                        <div class="mt-6 flex flex-wrap gap-3">
+                            <a href="#movie-{{ $featuredMovie->id }}" class="rounded-full bg-red-500 px-6 py-2 text-sm font-bold hover:bg-red-600">View Film</a>
+                            <a href="#films" class="rounded-full border border-white/20 px-6 py-2 text-sm font-bold text-white hover:bg-white/10">Browse Films</a>
+                        </div>
+                    </div>
+                </div>
+            @else
+                <div class="relative overflow-hidden p-8 sm:p-12">
+                    <div class="absolute inset-0 [background:radial-gradient(circle_at_30%_20%,rgba(239,68,68,0.22),transparent_45%),linear-gradient(135deg,#2a0a2e,#0b020d_70%)]" aria-hidden="true"></div>
+                    <div class="relative">
+                        <p class="font-bebas text-sm tracking-[0.28em] text-red-500">Featured</p>
+                        <h1 class="mt-1 font-bebas text-6xl leading-[0.95] sm:text-7xl">Featured title placeholder</h1>
+                        <p class="mt-3 max-w-xl text-sm leading-relaxed text-stone-200">No catalog entries are available yet. An administrator can add the first movie, and this hero will use its title, metadata, and poster or placeholder.</p>
+                        @if (auth()->user()?->usertype === 'admin')
+                            <a href="{{ route('admin.movies.create') }}" class="mt-6 inline-block rounded-full bg-red-500 px-6 py-2 text-sm font-bold hover:bg-red-600">Add the first movie</a>
+                        @endif
+                    </div>
+                </div>
+            @endif
+        </section>
+
+        <section id="recently-reviewed" aria-labelledby="recently-reviewed-heading" class="mt-12">
+            <div class="flex items-end justify-between gap-4">
+                <h2 id="recently-reviewed-heading" class="font-bebas text-4xl tracking-wide">Recently Reviewed</h2>
+                <p class="hidden text-xs uppercase tracking-[0.18em] text-stone-400 sm:block">{{ $recentlyReviewedMovies->count() }} titles</p>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+                @forelse ($recentlyReviewedMovies as $movie)
+                    <x-movie-card :movie="$movie" />
+                @empty
+                    @for ($placeholder = 0; $placeholder < 5; $placeholder++)
+                        <div>
+                            <x-poster-art title="Placeholder title" subtitle="Awaiting review" />
+                            <p class="mt-2 font-bebas text-lg leading-none tracking-wide text-stone-300">Title placeholder</p>
+                            <p class="mt-1 text-[11px] uppercase tracking-[0.18em] text-stone-500">Year placeholder</p>
+                            <div class="mt-1"><x-rating-stars :value="0" /></div>
+                        </div>
+                    @endfor
+                @endforelse
+            </div>
+            @if ($recentlyReviewedMovies->isEmpty())
+                <p class="mt-3 text-sm text-stone-400">Placeholder slots are shown until reviews are entered. No review content has been invented.</p>
+            @endif
+        </section>
+
+        <section id="films" aria-labelledby="popular-films-heading" class="mt-12">
+            <div class="flex items-end justify-between gap-4">
+                <h2 id="popular-films-heading" class="font-bebas text-4xl tracking-wide">Popular Films</h2>
+                <p class="hidden text-xs uppercase tracking-[0.18em] text-stone-400 sm:block">{{ $movieCount }} catalogued</p>
+            </div>
+            <div class="mt-4 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                @forelse ($popularMovies as $movie)
+                    <x-movie-card :movie="$movie" />
+                @empty
+                    @for ($placeholder = 0; $placeholder < 4; $placeholder++)
+                        <div>
+                            <x-poster-art title="Placeholder title" subtitle="Awaiting entry" />
+                            <p class="mt-2 font-bebas text-lg leading-none tracking-wide text-stone-300">Title placeholder</p>
+                            <p class="mt-1 text-[11px] uppercase tracking-[0.18em] text-stone-500">Year placeholder</p>
+                            <div class="mt-1"><x-rating-stars :value="0" /></div>
+                        </div>
+                    @endfor
+                @endforelse
+            </div>
+            @if ($popularMovies->isEmpty())
+                <p class="mt-3 text-sm text-stone-400">Placeholder slots are shown until an administrator adds movies.</p>
+            @endif
+        </section>
+
+        <section id="reviews-week" aria-labelledby="popular-reviews-heading" class="mt-12">
+            <div class="flex items-end justify-between gap-4">
+                <h2 id="popular-reviews-heading" class="font-bebas text-4xl tracking-wide">Popular Reviews This Week</h2>
+                <a href="#reviews-week" class="text-xs font-bold uppercase tracking-[0.18em] text-red-400 hover:text-red-300">See More &gt;</a>
+            </div>
+            <div class="mt-4 grid gap-4 md:grid-cols-2">
+                @forelse ($recentReviews as $review)
+                    <x-review-card :review="$review" />
+                @empty
+                    @for ($placeholder = 0; $placeholder < 2; $placeholder++)
+                        <div class="rounded-xl border border-white/10 bg-[#2A0A2E]/60 p-4 backdrop-blur-sm">
+                            <div class="flex items-start gap-3">
+                                <div class="w-16 shrink-0"><x-poster-art title="Review placeholder" subtitle="Placeholder" /></div>
+                                <div>
+                                    <p class="font-bebas text-2xl leading-none tracking-wide text-stone-300">Review placeholder</p>
+                                    <p class="mt-1 text-xs uppercase tracking-[0.18em] text-stone-500">Awaiting member review</p>
+                                    <div class="mt-2"><x-rating-stars :value="0" /></div>
+                                </div>
+                            </div>
+                            <p class="mt-3 text-xs leading-relaxed text-stone-400">Review cards will appear here after members submit reviews for catalogued movies.</p>
+                        </div>
+                    @endfor
+                @endforelse
+            </div>
+        </section>
+    </main>
+</div>
+@endsection

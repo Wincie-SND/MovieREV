@@ -86,7 +86,7 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
-        return redirect('/');
+        return redirect('/')->with('status', 'Successfully created an account');
     }
 
     /**

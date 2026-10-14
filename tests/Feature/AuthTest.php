@@ -22,12 +22,13 @@ class AuthTest extends TestCase
             ->assertSee('Confirm Password');
     }
 
-    public function test_home_page_links_to_login_and_register_for_guests(): void
+    public function test_home_page_loads_dashboard_for_guests(): void
     {
         $this->get('/')
             ->assertStatus(200)
-            ->assertSee('Sign In')
-            ->assertSee('Get Started!');
+            ->assertSee('MovieREV home', false)
+            ->assertSee('Recently Reviewed')
+            ->assertSee('Log In');
     }
 
     public function test_logout_requires_an_authenticated_user(): void
