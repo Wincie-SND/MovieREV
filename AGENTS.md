@@ -103,6 +103,7 @@ docker compose -f docker/docker-compose.yml down -v      # stop and wipe db_data
 ```
 
 - The repo is **bind-mounted** into `app` (`..:/var/www/html`), so editor changes are served live — no rebuild. `vendor/` is a separate named volume holding the image's Linux install, so **composer/npm changes need `down` + `up --build`**.
+- The app container's `CMD` runs `php artisan serve … --no-reload`, and that flag is **load-bearing**. With reload on, `serve` passes only a small whitelist of variables (and unsets the rest) to the child `php -S` process, so the `DB_*` values compose sets under `environment:` never reach it. The server then falls back to the bind-mounted host `.env` (`127.0.0.1:3307`), which is not reachable from inside the container, and every page 500s with `SQLSTATE[HY000] [2002] Connection refused`. `--no-reload` passes the whole environment through so `DB_HOST=db` / `DB_PORT=3306` win.
 - Compose resolves relative paths against `docker/`; the build context is `..` (repo root) with `dockerfile: docker/dockerfile`.
 
 ## Database
@@ -114,6 +115,8 @@ Start the DB before a host-run `php artisan serve`, or it 500s with `SQLSTATE[HY
 ```powershell
 docker compose -f docker/docker-compose.yml up -d db
 ```
+
+A host-run app (both `php artisan serve` and Laragon's Apache) also 500s on every DB-backed request — including `POST /register`, which looks like "the account wasn't saved" — with `SQLSTATE[HY000] [1045] Access denied for user 'root'@'…' (using password: NO)` when `.env`'s `DB_PASSWORD` is blank. The Docker MySQL always wants `secret` (what `.env.example` ships). Only the `app` container escapes this, because compose sets `DB_PASSWORD: secret` under `environment:`. Keep `.env` in step with `.env.example`.
 
 The **live database has the 5 application tables** — `users`, `movies`, `reviews`, `lists`, `list_movies` — and nothing else. The 8 Laravel framework tables (`sessions`, `cache`, `cache_locks`, `jobs`, `job_batches`, `failed_jobs`, `password_reset_tokens`, `migrations`) were dropped, and the app was moved off them (see below), so they are not required.
 
@@ -135,6 +138,8 @@ The tests will *not* catch any of this: `phpunit.xml` forces `array` session/cac
 `.env` is gitignored and must be created from `.env.example` (`composer setup` does this, plus `key:generate`). Without `APP_KEY` the feature test fails with `No application encryption key has been specified` — that is an unconfigured environment, not a code bug.
 
 Routing, middleware, and exception config all live in the `withRouting` / `withMiddleware` / `withExceptions` closures in `bootstrap/app.php`. There is no `RouteServiceProvider`. `withExceptions` already renders JSON for `api/*`.
+
+**"Remember me" depends on `SESSION_EXPIRE_ON_CLOSE=true`.** The login form's checkbox only controls the long-lived recaller cookie (`remember_web_…`, set via `Auth::attempt(..., $request->boolean('remember'))`); the ordinary session cookie is what keeps an *unticked* login alive. With Laravel's default `expire_on_close=false` that cookie outlives the browser for `SESSION_LIFETIME` minutes, so unticking "Remember me" would still leave the user signed in after a browser restart. `.env` / `.env.example` set `SESSION_EXPIRE_ON_CLOSE=true` (and `config/session.php` defaults to `true`) so the session cookie is a browser-session cookie and only a ticked "Remember me" survives a restart. Registration has no remember option, so `register()` uses plain `Auth::login($user)` — never `Auth::login($user, true)`.
 
 ## Conventions
 

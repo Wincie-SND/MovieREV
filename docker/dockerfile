@@ -17,4 +17,10 @@ RUN composer install --no-interaction --no-progress --prefer-dist \
 
 EXPOSE 8000
 
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+# `--no-reload` is required. With reload enabled, Laravel's serve command passes
+# only a whitelist of variables (and unsets the rest) to the child `php -S`
+# process, so the DB_* values compose sets for this container never reach it.
+# The server then falls back to the bind-mounted host .env (127.0.0.1:3307) and
+# 500s with "SQLSTATE[HY000] [2002] Connection refused". `--no-reload` passes
+# the whole environment through, so DB_HOST=db / DB_PORT=3306 win as intended.
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000", "--no-reload"]

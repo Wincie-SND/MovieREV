@@ -35,9 +35,11 @@ class AuthController extends Controller
             ? 'email'
             : 'username';
 
+        // Honour the "Remember me" checkbox: ticked issues the long-lived
+        // recaller cookie, unticked leaves the login session-only.
         if (! Auth::attempt(
             [$field => $credentials['identifier'], 'password' => $credentials['password']],
-            true, // always remember: keep the account signed in across refreshes/restarts
+            $request->boolean('remember'),
         )) {
             throw ValidationException::withMessages([
                 'identifier' => 'These credentials do not match our records.',
@@ -82,7 +84,10 @@ class AuthController extends Controller
         // to the column default ('user') since we never pass it here.
         $user = User::create($credentials);
 
-        Auth::login($user, true); // always remember, so a refresh keeps them signed in
+        // The register form has no "Remember me" option, so sign the new user
+        // in for this session only. Passing `true` here would hand out a
+        // persistent recaller cookie they never opted into.
+        Auth::login($user);
 
         $request->session()->regenerate();
 

@@ -100,7 +100,7 @@
                     @enderror
                 </div>
 
-                {{-- Remember me (the controller always remembers; see AuthController) --}}
+                {{-- Remember me: ticked issues a persistent login cookie, unticked is session-only --}}
                 <label class="flex items-center gap-[7px] cursor-pointer text-stone-300 text-[8px] font-bold leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">
                     <input type="checkbox" name="remember" value="1" class="m-0 w-3 h-3 accent-red-500"/>
                     Remember me
