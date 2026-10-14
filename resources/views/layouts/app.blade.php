@@ -42,11 +42,23 @@
         globals.css pins html/body to overflow:hidden for the fixed 1920x1080
         welcome canvas. Auth pages are normal scrolling pages, so undo just
         that locally (inline style beats globals.css's element selectors).
+
+        `preflight: false` means Tailwind never applies its `a { text-decoration:
+        inherit }` base rule, so every anchor keeps the browser's default
+        underline. Kill it globally here; the `hover:underline` utility is a
+        class selector and still outranks this element selector, so deliberate
+        hover underlines keep working.
     --}}
     <style>
         html, body {
             overflow: auto;
             height: auto;
+        }
+
+        a,
+        button,
+        [role="button"] {
+            text-decoration: none;
         }
     </style>
 </head>

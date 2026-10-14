@@ -30,32 +30,33 @@
 
     <header class="sticky top-0 z-40 border-b border-red-600/50 bg-gradient-to-b from-black/95 via-black/80 to-black/55 shadow-[0_18px_40px_-26px_rgba(239,68,68,0.6)] backdrop-blur">
         <div class="mx-auto flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-3 px-4 py-3">
-            <a href="{{ route('home') }}" class="flex items-center gap-2" aria-label="MovieREV home">
+            <a href="{{ route('home') }}" class="no-underline flex items-center gap-2" aria-label="MovieREV home">
                 <img src="{{ asset('img/logo.png') }}" alt="" class="h-8 w-8 object-contain" />
                 <span class="font-bebas text-2xl tracking-[0.16em]">MOVIE<span class="text-red-500">REV</span></span>
             </a>
 
             <nav class="hidden items-center gap-5 text-xs font-bold tracking-[0.18em] text-stone-300 md:flex" aria-label="Primary">
-                <a href="#top" class="text-white hover:text-red-400">Home</a>
-                <a href="#films" class="hover:text-red-400">Films</a>
-                <a href="#featured" class="hover:text-red-400">Teasers</a>
+                <a href="#top" class="no-underline text-white hover:text-red-400">Home</a>
+                <a href="#films" class="no-underline hover:text-red-400">Films</a>
+                <a href="#featured" class="no-underline hover:text-red-400">Teasers</a>
             </nav>
 
-            <form method="GET" action="{{ route('home') }}" role="search" class="ml-auto flex min-w-[180px] flex-1 items-center gap-2 rounded-full border border-white/10 bg-[#2A0A2E] py-1 pl-3 pr-1 sm:max-w-xs">
+            <form method="GET" action="{{ route('home') }}" role="search"
+                  class="group ml-auto flex h-9 min-w-[180px] flex-1 items-center gap-2 rounded-full border border-white/10 bg-[#2A0A2E]/90 pl-3.5 pr-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur transition-colors focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30 sm:max-w-xs">
                 <label for="dashboard-search" class="sr-only">Search movies</label>
-                <svg class="h-4 w-4 shrink-0 text-stone-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                <svg class="h-4 w-4 shrink-0 text-stone-400 transition-colors group-focus-within:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-3.8-3.8M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" />
                 </svg>
-                <input id="dashboard-search" name="q" type="search" value="{{ $search }}" placeholder="Search movies" autocomplete="off" class="h-7 w-full bg-transparent text-sm text-white outline-none placeholder:text-stone-400" />
+                <input id="dashboard-search" name="q" type="search" value="{{ $search }}" placeholder="Search movies" autocomplete="off" class="h-full w-full bg-transparent text-sm text-white outline-none placeholder:text-stone-400 [&::-webkit-search-cancel-button]:hidden" />
                 <button type="submit" class="sr-only">Search</button>
             </form>
 
             <div class="flex items-center gap-3">
                 @guest
-                    <a href="{{ route('login') }}" class="rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white hover:bg-red-600">Log In</a>
+                    <a href="{{ route('login') }}" class="no-underline rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Log In</a>
                 @else
                     @if (auth()->user()?->usertype === 'admin')
-                        <a href="{{ route('admin.movies.index') }}" class="rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] hover:bg-white/20">Manage Movies</a>
+                        <a href="{{ route('admin.movies.index') }}" class="no-underline rounded-full bg-white/10 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/20 hover:no-underline">Manage Movies</a>
                     @endif
                     <span class="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 sm:flex">
                         <span aria-hidden="true" class="inline-flex h-7 w-7 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
@@ -63,7 +64,7 @@
                     </span>
                     <form method="POST" action="{{ route('logout') }}" class="m-0">
                         @csrf
-                        <button type="submit" class="rounded-full border border-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] hover:bg-white/10">Log Out</button>
+                        <button type="submit" class="no-underline rounded-full border border-white/15 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-white/10">Log Out</button>
                     </form>
                 @endguest
             </div>
@@ -110,8 +111,8 @@
                             {{ $featuredMovie->description ? \Illuminate\Support\Str::limit($featuredMovie->description, 240) : 'A full description has not been entered yet. This slot keeps the hero layout intact until an administrator adds one.' }}
                         </p>
                         <div class="mt-6 flex flex-wrap gap-3">
-                            <a href="#movie-{{ $featuredMovie->id }}" class="rounded-full bg-red-500 px-6 py-2 text-sm font-bold hover:bg-red-600">View Film</a>
-                            <a href="#films" class="rounded-full border border-white/20 px-6 py-2 text-sm font-bold text-white hover:bg-white/10">Browse Films</a>
+                            <a href="#movie-{{ $featuredMovie->id }}" class="no-underline rounded-full bg-red-500 px-6 py-2 text-sm font-bold text-white hover:bg-red-600 hover:no-underline">View Film</a>
+                            <a href="#films" class="no-underline rounded-full border border-white/20 px-6 py-2 text-sm font-bold text-white hover:bg-white/10 hover:no-underline">Browse Films</a>
                         </div>
                     </div>
                 </div>
@@ -123,7 +124,7 @@
                         <h1 class="mt-1 font-bebas text-6xl leading-[0.95] sm:text-7xl">Featured title placeholder</h1>
                         <p class="mt-3 max-w-xl text-sm leading-relaxed text-stone-200">No catalog entries are available yet. An administrator can add the first movie, and this hero will use its title, metadata, and poster or placeholder.</p>
                         @if (auth()->user()?->usertype === 'admin')
-                            <a href="{{ route('admin.movies.create') }}" class="mt-6 inline-block rounded-full bg-red-500 px-6 py-2 text-sm font-bold hover:bg-red-600">Add the first movie</a>
+                            <a href="{{ route('admin.movies.create') }}" class="no-underline mt-6 inline-block rounded-full bg-red-500 px-6 py-2 text-sm font-bold text-white hover:bg-red-600 hover:no-underline">Add the first movie</a>
                         @endif
                     </div>
                 </div>
@@ -181,7 +182,7 @@
         <section id="reviews-week" aria-labelledby="popular-reviews-heading" class="mt-12">
             <div class="flex items-end justify-between gap-4">
                 <h2 id="popular-reviews-heading" class="font-bebas text-4xl tracking-wide">Popular Reviews This Week</h2>
-                <a href="#reviews-week" class="text-xs font-bold uppercase tracking-[0.18em] text-red-400 hover:text-red-300">See More &gt;</a>
+                <a href="#reviews-week" class="no-underline text-xs font-bold uppercase tracking-[0.18em] text-red-400 hover:text-red-300 hover:underline">See More &gt;</a>
             </div>
             <div class="mt-4 grid gap-4 md:grid-cols-2">
                 @forelse ($recentReviews as $review)
