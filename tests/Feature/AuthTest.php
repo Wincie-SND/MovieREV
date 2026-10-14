@@ -15,7 +15,7 @@ class AuthTest extends TestCase
     {
         $this->get('/register')
             ->assertStatus(200)
-            ->assertSee('Create Account')
+            ->assertSee('Create your account')
             ->assertSee('Confirm Password');
     }
 
