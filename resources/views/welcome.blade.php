@@ -42,12 +42,12 @@
             </nav>
 
             <form method="GET" action="{{ route('home') }}" role="search"
-                  class="group ml-auto flex h-9 min-w-[180px] flex-1 items-center gap-2 rounded-full border border-white/10 bg-[#2A0A2E]/90 pl-3.5 pr-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur transition-colors focus-within:border-red-500/60 focus-within:ring-1 focus-within:ring-red-500/30 sm:max-w-xs">
+                  class="group ml-auto flex h-9 min-w-[180px] flex-1 items-center gap-2 rounded-full border border-white/10 bg-[#2A0A2E]/90 pl-3.5 pr-3 shadow-[inset_0_1px_0_rgba(255,255,255,0.04),0_10px_30px_-20px_rgba(0,0,0,0.9)] backdrop-blur transition-colors focus-within:border-red-500/50 sm:max-w-xs">
                 <label for="dashboard-search" class="sr-only">Search movies</label>
                 <svg class="h-4 w-4 shrink-0 text-stone-400 transition-colors group-focus-within:text-red-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="m20 20-3.8-3.8M11 18a7 7 0 1 1 0-14 7 7 0 0 1 0 14Z" />
                 </svg>
-                <input id="dashboard-search" name="q" type="search" value="{{ $search }}" placeholder="Search movies" autocomplete="off" class="h-full w-full bg-transparent text-sm text-white outline-none placeholder:text-stone-400 [&::-webkit-search-cancel-button]:hidden" />
+                <input id="dashboard-search" name="q" type="search" value="{{ $search }}" placeholder="Search movies" autocomplete="off" class="h-full w-full appearance-none border-0 bg-transparent text-sm text-white outline-none focus:outline-none placeholder:text-stone-400" />
                 <button type="submit" class="sr-only">Search</button>
             </form>
 

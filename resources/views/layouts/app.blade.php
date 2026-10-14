@@ -60,6 +60,34 @@
         [role="button"] {
             text-decoration: none !important;
         }
+
+        /*
+         * `input[type="search"]` keeps the UA's own searchfield chrome when
+         * preflight is off: a `2px inset` border plus decorative widgets. Inside
+         * a rounded, already-bordered pill that border paints as a rectangular
+         * outline overlapping the pill, so strip the appearance and hide the
+         * decorations here.
+         *
+         * The border itself is left alone on purpose. This selector is an
+         * element + attribute match, so it outranks a utility class, and a
+         * blanket `border-width: 0` would erase the intended `border` on the
+         * admin search field. Borderless search inputs opt in with `border-0`.
+         */
+        input[type="search"] {
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="search"]::-webkit-search-decoration,
+        input[type="search"]::-webkit-search-cancel-button,
+        input[type="search"]::-webkit-search-results-button,
+        input[type="search"]::-webkit-search-results-decoration,
+        input[type="search"]::-ms-clear,
+        input[type="search"]::-ms-reveal {
+            -webkit-appearance: none;
+            appearance: none;
+            display: none;
+        }
     </style>
 </head>
 <body class="min-h-screen [background:linear-gradient(180deg,rgba(31,20,47,1)_30%,rgba(73,46,110,1)_100%)]">
