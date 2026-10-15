@@ -1,14 +1,19 @@
 -- MovieREV database
 --
--- This file is the project's complete database: the 5 application tables
--- (users, movies, reviews, lists, list_movies) exported from the live
--- `movierev` database. It is kept in sync with that database.
+-- This file is the project's complete database: the 4 application tables
+-- (users, reviews, lists, list_movies) exported from the live `movierev`
+-- database. It is kept in sync with that database.
+--
+-- The `movies` table is gone: the movie catalog is read from the TMDB API at
+-- runtime (see app/Services/TmdbClient.php and config/services.php), so no
+-- movie rows are stored locally. `reviews` and `list_movies` therefore
+-- reference a movie by its TMDB id instead of a foreign key into `movies`.
 --
 -- The 8 Laravel framework tables (sessions, cache, cache_locks, jobs,
 -- job_batches, failed_jobs, password_reset_tokens, migrations) are
 -- deliberately NOT here: they were dropped, and the surrounding code was
 -- moved off them. Sessions, cache and the queue no longer use the database
--- (see .env / config), so these 5 tables are all the app needs to run.
+-- (see .env / config), so these 4 tables are all the app needs to run.
 --
 -- `users` combines Laravel's stock structure with movierev.sql's columns:
 --     id, name, email, email_verified_at, password, remember_token,
@@ -20,7 +25,7 @@
 --
 -- Data: only `users` (accounts created through the register form —
 -- re-export the users INSERTs after new sign-ups so this file stays in
--- sync). movies, reviews, lists and list_movies are empty.
+-- sync). reviews, lists and list_movies are empty.
 --
 -- To import: select the `movierev` database in phpMyAdmin and use Import,
 -- or from a shell:
@@ -53,12 +58,11 @@ DROP TABLE IF EXISTS `list_movies`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `list_movies` (
   `list_id` int NOT NULL,
-  `movie_id` int NOT NULL,
+  `tmdb_id` int NOT NULL,
   `added_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`list_id`,`movie_id`),
-  KEY `movie_id` (`movie_id`),
-  CONSTRAINT `list_movies_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `lists` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `list_movies_ibfk_2` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE
+  PRIMARY KEY (`list_id`,`tmdb_id`),
+  KEY `tmdb_id` (`tmdb_id`),
+  CONSTRAINT `list_movies_ibfk_1` FOREIGN KEY (`list_id`) REFERENCES `lists` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -95,33 +99,6 @@ CREATE TABLE `lists` (
 /*!40000 ALTER TABLE `lists` ENABLE KEYS */;
 
 --
--- Table structure for table `movies`
---
-
-DROP TABLE IF EXISTS `movies`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `movies` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
-  `release_year` smallint DEFAULT NULL,
-  `genre` varchar(50) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `poster_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  KEY `idx_title` (`title`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `movies`
---
-
-/*!40000 ALTER TABLE `movies` DISABLE KEYS */;
-/*!40000 ALTER TABLE `movies` ENABLE KEYS */;
-
---
 -- Table structure for table `reviews`
 --
 
@@ -131,15 +108,16 @@ DROP TABLE IF EXISTS `reviews`;
 CREATE TABLE `reviews` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` bigint unsigned NOT NULL,
-  `movie_id` int NOT NULL,
+  `tmdb_id` int NOT NULL,
+  `movie_title` varchar(150) COLLATE utf8mb4_general_ci NOT NULL,
+  `poster_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `rating` tinyint NOT NULL,
   `body` text,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `one_review_per_user` (`user_id`,`movie_id`),
-  KEY `movie_id` (`movie_id`),
-  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `reviews_ibfk_2` FOREIGN KEY (`movie_id`) REFERENCES `movies` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `one_review_per_user` (`user_id`,`tmdb_id`),
+  KEY `tmdb_id` (`tmdb_id`),
+  CONSTRAINT `reviews_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

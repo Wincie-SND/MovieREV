@@ -1,23 +1,25 @@
 @props(['review'])
 
 @php
-    $movie = $review->movie;
+    // The movie lives in TMDB, so the card uses the snapshot stored on the
+    // review rather than a `$review->movie` relation.
+    $poster = $review->posterSource();
     $user = $review->user;
-    $poster = $movie?->posterSource();
+    $title = trim((string) $review->movie_title) !== '' ? $review->movie_title : 'Untitled review';
     $initial = mb_strtoupper(mb_substr(trim((string) ($user?->name ?? $user?->username ?? '?')), 0, 1) ?: '?');
 @endphp
 
 <article class="rounded-xl border border-white/10 bg-[#2A0A2E]/70 p-4 backdrop-blur-sm">
     <div class="flex items-start gap-3">
         <div class="w-16 shrink-0">
-            @if ($movie && $poster)
-                <img src="{{ str_starts_with($poster, 'http') ? $poster : asset(ltrim($poster, '/')) }}" alt="{{ $movie->title }} poster" class="aspect-[2/3] w-full rounded-md border border-white/10 object-cover" loading="lazy" />
+            @if ($poster)
+                <img src="{{ $poster }}" alt="{{ $title }} poster" class="aspect-[2/3] w-full rounded-md border border-white/10 object-cover" loading="lazy" />
             @else
-                <x-poster-art :title="$movie?->title ?? 'Review placeholder'" subtitle="Placeholder" />
+                <x-poster-art :title="$title" subtitle="Placeholder" />
             @endif
         </div>
         <div class="min-w-0">
-            <h3 class="font-bebas text-2xl leading-none tracking-wide">{{ $movie?->title ?? 'Untitled review' }}</h3>
+            <h3 class="font-bebas text-2xl leading-none tracking-wide">{{ $title }}</h3>
             <p class="mt-1 flex items-center gap-2 text-xs text-stone-300">
                 <span aria-hidden="true" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ $initial }}</span>
                 <span class="truncate">{{ $user?->username ?? $user?->name ?? 'MovieREV member' }}</span>

@@ -86,7 +86,7 @@ class AuthTest extends TestCase
         $this->get('/')
             ->assertStatus(200)
             ->assertSee('MovieREV home', false)
-            ->assertSee('Recently Reviewed')
+            ->assertSee('Recently Released')
             ->assertSee('Log In')
             ->assertSee('Sign Up');
     }

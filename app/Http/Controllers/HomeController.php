@@ -2,96 +2,77 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Movie;
 use App\Models\Review;
+use App\Services\TmdbClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Throwable;
 
 class HomeController extends Controller
 {
     /**
-     * Show the public dashboard backed by admin-entered catalog records.
+     * Show the public dashboard.
+     *
+     * The catalog is read from TMDB on every request; only the community
+     * reviews come from the database. Nothing about a movie is stored locally,
+     * so the home page no longer depends on the `movies` table.
      */
-    public function index(Request $request): View
+    public function index(Request $request, TmdbClient $tmdb): View
     {
         $search = trim((string) $request->query('q', ''));
 
-        $moviesTable = Schema::hasTable('movies');
-        $reviewsTable = Schema::hasTable('reviews');
-        $movieDataAvailable = $moviesTable && $reviewsTable;
-
-        $movies = collect();
-        $recentReviews = collect();
-
-        if ($moviesTable) {
-            $movieQuery = Movie::query();
-
-            if ($movieDataAvailable) {
-                $movieQuery->withAvg('reviews as average_rating', 'rating');
-                $movieQuery->withCount('reviews');
-            }
-
-            $movies = $movieQuery
-                ->search($search)
-                ->orderByDesc('id')
-                ->limit(8)
-                ->get();
-        }
-
-        if ($movieDataAvailable) {
-            $recentReviews = Review::query()
-                ->with(['movie', 'user'])
-                ->whereHas('movie')
-                ->when($search !== '', function ($query) use ($search): void {
-                    $like = '%'.$search.'%';
-
-                    $query->where(function ($query) use ($like): void {
-                        $query->where('body', 'like', $like)
-                            ->orWhereHas('movie', function ($query) use ($like): void {
-                                $query->where('title', 'like', $like)
-                                    ->orWhere('genre', 'like', $like)
-                                    ->orWhere('description', 'like', $like);
-                            });
-                    });
-                })
-                ->orderByDesc('id')
-                ->limit(4)
-                ->get();
-        }
-
-        $featuredMovie = $movies->first();
-        $recentMovieIds = $recentReviews
-            ->map(fn (Review $review) => $review->movie_id)
-            ->filter()
-            ->unique()
-            ->values();
-        $recentlyReviewedMovies = collect();
-
-        if ($moviesTable && $recentMovieIds->isNotEmpty()) {
-            $reviewedMovieQuery = Movie::query()->whereIn('id', $recentMovieIds);
-
-            if ($movieDataAvailable) {
-                $reviewedMovieQuery->withAvg('reviews as average_rating', 'rating');
-                $reviewedMovieQuery->withCount('reviews');
-            }
-
-            $recentlyReviewedMovies = $reviewedMovieQuery
-                ->get()
-                ->sortBy(fn (Movie $movie) => array_search($movie->id, $recentMovieIds->all(), true))
-                ->values()
-                ->take(5);
-        }
-
-        $popularMovies = $movies->take(4);
+        // A TMDB outage, a rejected credential or a network blip must not take
+        // the landing page down: each section falls back to its placeholders.
+        $movies = $this->attempt(fn (): Collection => $search === ''
+            ? $tmdb->popular()
+            : $tmdb->search($search));
 
         return view('welcome', [
             'search' => $search,
-            'featuredMovie' => $featuredMovie,
-            'popularMovies' => $popularMovies,
-            'recentlyReviewedMovies' => $recentlyReviewedMovies,
-            'recentReviews' => $recentReviews,
-            'movieCount' => $moviesTable ? Movie::count() : 0,
+            'featuredMovie' => $movies->first(),
+            'popularMovies' => $movies->take(4),
+            'recentlyReleasedMovies' => $this->attempt(fn (): Collection => $tmdb->nowPlaying(5)),
+            'recentReviews' => $this->recentReviews($search),
+            'movieCount' => $movies->count(),
         ]);
+    }
+
+    /**
+     * A failed read degrades to an empty collection.
+     *
+     * @param  callable(): Collection<int, mixed>  $callback
+     * @return Collection<int, mixed>
+     */
+    private function attempt(callable $callback): Collection
+    {
+        try {
+            return $callback();
+        } catch (Throwable $exception) {
+            report($exception);
+
+            return collect();
+        }
+    }
+
+    /**
+     * The reviews come from the snapshot each row keeps (`tmdb_id`, title,
+     * poster), because the movie itself is no longer in the database.
+     *
+     * The database may legitimately be unreachable — the home page is a public
+     * landing page and the catalog does not need MySQL — so a failed read
+     * degrades to an empty section instead of a 500. The same guard covers a
+     * missing `reviews` table on a fresh checkout.
+     *
+     * @return Collection<int, Review>
+     */
+    private function recentReviews(string $search): Collection
+    {
+        return $this->attempt(fn (): Collection => Review::query()
+            ->with('user')
+            ->when($search !== '', fn ($query) => $query->search($search))
+            ->orderByDesc('id')
+            ->limit(4)
+            ->get());
     }
 }

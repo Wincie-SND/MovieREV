@@ -14,6 +14,27 @@ return [
     |
     */
 
+    /*
+    |--------------------------------------------------------------------------
+    | TMDB
+    |--------------------------------------------------------------------------
+    |
+    | The movie catalog is read from The Movie Database instead of a local
+    | `movies` table. TMDB accepts either the v3 `api_key` query parameter or a
+    | v4 read access token; give whichever you have, and the token wins when
+    | both are set. With neither configured the dashboard renders its
+    | placeholder slots rather than failing.
+    |
+    */
+
+    'tmdb' => [
+        'key' => env('TMDB_API_KEY'),
+        'token' => env('TMDB_ACCESS_TOKEN'),
+        'base_url' => env('TMDB_BASE_URL', 'https://api.themoviedb.org/3'),
+        'image_base_url' => env('TMDB_IMAGE_BASE_URL', 'https://image.tmdb.org/t/p'),
+        'timeout' => (int) env('TMDB_TIMEOUT', 10),
+    ],
+
     'postmark' => [
         'key' => env('POSTMARK_API_KEY'),
     ],
