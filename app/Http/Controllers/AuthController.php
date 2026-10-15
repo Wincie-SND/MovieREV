@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -37,13 +38,25 @@ class AuthController extends Controller
 
         // Honour the "Remember me" checkbox: ticked issues the long-lived
         // recaller cookie, unticked leaves the login session-only.
+        $remember = $request->boolean('remember');
+
         if (! Auth::attempt(
             [$field => $credentials['identifier'], 'password' => $credentials['password']],
-            $request->boolean('remember'),
+            $remember,
         )) {
             throw ValidationException::withMessages([
                 'identifier' => 'These credentials do not match our records.',
             ]);
+        }
+
+        // An unticked "Remember me" must not inherit a persistent login from an
+        // earlier ticked one. The recaller cookie is only cleared by a logout,
+        // and a still-valid one silently signs the user back in once this
+        // session ends - exactly the "I unchecked it and I am still logged in"
+        // report. Tombstone it here so the unchecked login is truly
+        // session-only. `Auth::attempt(..., false)` does not do this itself.
+        if (! $remember) {
+            Cookie::queue(Cookie::forget(Auth::guard('web')->getRecallerName()));
         }
 
         $request->session()->regenerate();

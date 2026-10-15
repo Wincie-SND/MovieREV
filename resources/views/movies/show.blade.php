@@ -61,15 +61,28 @@
                             <p class="mt-3 text-xs uppercase tracking-[0.18em] text-stone-300">{{ $meta->implode(' • ') }}</p>
                         @endif
 
-                        <div class="mt-4 flex flex-wrap items-center gap-x-3 gap-y-1">
-                            <x-rating-stars :value="$movie->average_rating" />
-                            <span class="text-xs text-stone-400">{{ number_format($movie->reviews_count) }} TMDB {{ \Illuminate\Support\Str::plural('rating', $movie->reviews_count) }}</span>
-                            <span aria-hidden="true" class="text-stone-600">•</span>
-                            <span class="text-xs text-stone-400">{{ $reviewCount }} member {{ \Illuminate\Support\Str::plural('review', $reviewCount) }}</span>
+                        <div class="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2">
+                            {{-- TMDB's own score is movie information, kept but clearly labelled. --}}
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-stone-500">TMDB</span>
+                                <x-rating-stars :value="$movie->average_rating" />
+                                <span class="text-xs text-stone-400">{{ number_format((float) $movie->average_rating, 1) }}/5 &middot; {{ number_format($movie->reviews_count) }} {{ \Illuminate\Support\Str::plural('rating', $movie->reviews_count) }}</span>
+                            </div>
+
+                            {{-- MovieREV's community score comes from member reviews only. --}}
+                            <div class="flex items-center gap-2">
+                                <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-red-400">MovieREV</span>
+                                @if ($communityRating !== null)
+                                    <x-rating-stars :value="$communityRating" />
+                                    <span class="text-xs text-stone-300">{{ number_format($communityRating, 1) }}/5 &middot; {{ $reviewCount }} {{ \Illuminate\Support\Str::plural('review', $reviewCount) }}</span>
+                                @else
+                                    <span class="text-xs text-stone-400">No member reviews yet</span>
+                                @endif
+                            </div>
                         </div>
 
                         <div class="mt-6 flex flex-wrap gap-3">
-                            <a href="#reviews" class="no-underline rounded-full bg-red-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Write a review</a>
+                            <a href="#write-review" class="no-underline rounded-full bg-red-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Write a review</a>
                             <button type="button" aria-disabled="true" title="Watch lists are not available yet"
                                     class="cursor-not-allowed rounded-full border border-white/30 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/60">
                                 + Add to watch list
@@ -147,18 +160,73 @@
         @endif
 
         <section id="reviews" aria-labelledby="reviews-heading" class="mt-12">
-            <div class="flex items-end justify-between gap-4">
-                <h2 id="reviews-heading" class="m-0 text-3xl font-bold text-white [font-family:'Playfair_Display',Georgia,serif]">Reviews</h2>
-                <p class="hidden text-xs uppercase tracking-[0.18em] text-stone-400 sm:block">{{ $reviewCount }} {{ \Illuminate\Support\Str::plural('review', $reviewCount) }}</p>
+            <div class="flex flex-wrap items-end justify-between gap-4">
+                <div>
+                    <h2 id="reviews-heading" class="m-0 text-3xl font-bold text-white [font-family:'Playfair_Display',Georgia,serif]">MovieREV Community Reviews</h2>
+                    <p class="mt-1 text-xs uppercase tracking-[0.18em] text-stone-400">Written by MovieREV members — never pulled from TMDB</p>
+                </div>
+                <p class="text-xs uppercase tracking-[0.18em] text-stone-400">{{ $reviewCount }} {{ \Illuminate\Support\Str::plural('review', $reviewCount) }}</p>
             </div>
 
-            <div class="mt-4 grid gap-4 md:grid-cols-2">
+            {{-- The community average is calculated from member ratings only. --}}
+            <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 rounded-xl border border-white/10 bg-[#150017]/85 p-5 backdrop-blur-sm">
+                @if ($communityRating !== null)
+                    <x-rating-stars :value="$communityRating" />
+                    <span class="text-2xl font-bold text-white [font-family:'Playfair_Display',Georgia,serif]">{{ number_format($communityRating, 1) }}<span class="text-sm text-stone-400">/5</span></span>
+                    <span class="text-sm text-stone-300">from {{ $reviewCount }} MovieREV {{ \Illuminate\Support\Str::plural('review', $reviewCount) }}</span>
+                @else
+                    <p class="m-0 text-sm text-stone-300">No MovieREV community rating yet — be the first to review this movie!</p>
+                @endif
+            </div>
+
+            {{-- Members get the form; guests get a prompt to sign in first. --}}
+            <div id="write-review" class="mt-6 scroll-mt-24 rounded-xl border border-white/10 bg-[#2A0A2E]/60 p-5 backdrop-blur-sm sm:p-6">
+                @auth
+                    @if ($editingReview)
+                        <h3 class="m-0 font-bebas text-2xl tracking-wide text-white">Edit your review</h3>
+                        <p class="mt-1 text-sm text-stone-400">Update your rating or rewrite your review of {{ $movie->title }}.</p>
+                        <div class="mt-4">
+                            <x-review-form :action="route('reviews.update', $editingReview)" method="PUT" :review="$editingReview"
+                                            submit-label="Save changes" :cancel-url="route('movies.show', $movie->id).'#reviews'" />
+                        </div>
+                    @elseif ($myReview)
+                        <h3 class="m-0 font-bebas text-2xl tracking-wide text-white">You have reviewed this film</h3>
+                        <p class="mt-1 text-sm text-stone-400">MovieREV keeps one review per member per movie — edit or delete yours below.</p>
+                        <div class="mt-4 flex flex-wrap items-center gap-4">
+                            <a href="{{ route('movies.show', $movie->id) }}?edit={{ $myReview->id }}#write-review"
+                               class="no-underline rounded-full bg-red-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Edit your review</a>
+                            <form method="POST" action="{{ route('reviews.destroy', $myReview) }}" class="m-0"
+                                  onsubmit="return confirm('Delete your review? This cannot be undone.');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cursor-pointer rounded-full border border-white/20 bg-transparent px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-white/10">Delete review</button>
+                            </form>
+                        </div>
+                    @else
+                        <h3 class="m-0 font-bebas text-2xl tracking-wide text-white">Write a review</h3>
+                        <p class="mt-1 text-sm text-stone-400">Tell other members what you thought of {{ $movie->title }}.</p>
+                        <div class="mt-4">
+                            <x-review-form :action="route('reviews.store', $movie->id)" method="POST" submit-label="Submit review" />
+                        </div>
+                    @endif
+                @else
+                    <h3 class="m-0 font-bebas text-2xl tracking-wide text-white">Want to review this movie?</h3>
+                    <p class="mt-1 text-sm text-stone-300">
+                        <a href="{{ route('login') }}" class="no-underline font-bold text-red-400 transition-colors hover:text-red-300">Log in</a>
+                        or
+                        <a href="{{ route('register') }}" class="no-underline font-bold text-red-400 transition-colors hover:text-red-300">create an account</a>
+                        to rate this film and write a review. MovieREV reviews come from members like you.
+                    </p>
+                @endauth
+            </div>
+
+            <div class="mt-6 grid gap-4 md:grid-cols-2">
                 @forelse ($reviews as $review)
-                    <x-review-card :review="$review" />
+                    <x-review-card :review="$review" :excerpt="false" :show-movie="false" />
                 @empty
                     <div class="rounded-xl border border-white/10 bg-[#2A0A2E]/60 p-6 backdrop-blur-sm md:col-span-2">
                         <p class="m-0 font-bebas text-2xl tracking-wide text-stone-300">No reviews yet</p>
-                        <p class="mt-1 text-sm text-stone-400">Nobody has reviewed {{ $movie->title }} yet. Writing reviews is not open yet — it arrives with the member area.</p>
+                        <p class="mt-1 text-sm text-stone-400">No reviews yet. Be the first to review {{ $movie->title }}!</p>
                     </div>
                 @endforelse
             </div>

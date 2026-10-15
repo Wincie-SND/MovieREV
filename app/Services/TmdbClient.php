@@ -21,6 +21,9 @@ use Throwable;
  * nor a v4 access token configured, every list method returns an empty
  * collection so the page falls back to its placeholder slots instead of
  * failing, and {@see find()} reports "no such movie".
+ *
+ * TMDB's review endpoint is deliberately never called: MovieREV renders only
+ * its own members' reviews, which live in the local database.
  */
 class TmdbClient
 {
@@ -85,6 +88,8 @@ class TmdbClient
         }
 
         $path = "/movie/{$id}";
+        // Reviews are intentionally omitted: MovieREV shows only its own
+        // members' reviews from the database, never TMDB's.
         $response = $this->send($path, ['append_to_response' => 'credits,release_dates,similar']);
 
         if ($response->status() === 404) {

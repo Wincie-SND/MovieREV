@@ -42,7 +42,7 @@
                             @if ($featuredMovie->genre)
                                 • {{ $featuredMovie->genre }}
                             @endif
-                            • ★ {{ number_format((float) ($featuredMovie->average_rating ?? 0), 1) }}
+                            • ★ {{ number_format((float) ($featuredMovie->average_rating ?? 0), 1) }} TMDB rating
                         </p>
                         <p class="mt-4 max-w-xl text-sm leading-relaxed text-stone-200">
                             {{ $featuredMovie->description ? \Illuminate\Support\Str::limit($featuredMovie->description, 240) : 'TMDB has not published an overview for this title yet.' }}

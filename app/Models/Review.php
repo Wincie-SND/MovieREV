@@ -14,15 +14,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * movie it points at: `tmdb_id` is the link the API understands, while
  * `movie_title` and `poster_url` let the dashboard render a review without a
  * round trip to TMDB (or a `movies` table to join).
+ *
+ * These are MovieREV's own reviews only — never anything pulled from TMDB.
  */
-#[Fillable(['user_id', 'tmdb_id', 'movie_title', 'poster_url', 'rating', 'body'])]
+#[Fillable(['user_id', 'tmdb_id', 'movie_title', 'poster_url', 'rating', 'title', 'body'])]
 class Review extends Model
 {
-    /**
-     * The table persists only created_at.
-     */
-    public $timestamps = false;
-
     /**
      * @return array<string, string>
      */

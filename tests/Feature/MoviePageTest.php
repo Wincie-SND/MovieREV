@@ -36,8 +36,10 @@ class MoviePageTest extends TestCase
             $table->string('movie_title', 150);
             $table->string('poster_url', 255)->nullable();
             $table->tinyInteger('rating');
+            $table->string('title', 120)->nullable();
             $table->text('body')->nullable();
             $table->timestamp('created_at')->useCurrent();
+            $table->timestamp('updated_at')->nullable();
 
             $table->unique(['user_id', 'tmdb_id']);
         });

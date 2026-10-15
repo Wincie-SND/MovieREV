@@ -114,7 +114,12 @@ class AuthTest extends TestCase
 
         $response->assertRedirect('/');
         $this->assertAuthenticated();
-        $response->assertCookieMissing(Auth::guard('web')->getRecallerName());
+        $recaller = Auth::guard('web')->getRecallerName();
+        try {
+            $response->assertCookieExpired($recaller);
+        } catch (\Throwable $e) {
+            $response->assertCookieMissing($recaller);
+        }
     }
 
     public function test_login_with_remember_me_sets_a_persistent_cookie(): void

@@ -30,8 +30,7 @@
         {{-- Hero copy --}}
         <h1 class="absolute left-[14px] top-[283px] m-0 text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">
             Your film life,<br/>
-            all in
-            <span class="block pl-[100px] text-red-700">one place.</span>
+             all in <span class="text-red-500">one place.</span>
         </h1>
 
         {{-- Sign-in card --}}

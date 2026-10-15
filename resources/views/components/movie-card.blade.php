@@ -23,7 +23,7 @@
         @endif
         <div class="mt-2 flex items-center justify-between gap-2">
             <x-rating-stars :value="$average" />
-            <span class="text-[11px] text-stone-400">{{ $ratingCount }} {{ \Illuminate\Support\Str::plural('rating', $ratingCount) }}</span>
+            <span class="text-[11px] text-stone-400">{{ number_format($ratingCount) }} TMDB {{ \Illuminate\Support\Str::plural('rating', $ratingCount) }}</span>
         </div>
     </div>
 </a>
