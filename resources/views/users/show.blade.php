@@ -8,7 +8,7 @@
 <div id="top" class="relative min-h-screen text-white [background:linear-gradient(180deg,#0a040f_0%,#13051b_46%,#07040c_100%)]">
     @include('partials.header', ['search' => ''])
 
-    <main class="mx-auto w-full max-w-6xl px-4 pb-16">
+    <main class="mx-auto w-full max-w-[1800px] px-4 pb-16 sm:px-6 lg:px-8 2xl:px-10">
         @if (session('status'))
             <p role="status" class="mt-6 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-200">{{ session('status') }}</p>
         @endif

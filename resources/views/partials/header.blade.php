@@ -9,16 +9,17 @@
 @php($search = $search ?? '')
 
 <header class="sticky top-0 z-50 w-full border-b border-red-500/70 bg-[#0b020d]/95 shadow-[0_12px_32px_-22px_rgba(239,68,68,0.8)] backdrop-blur-md">
-    <div class="mx-auto flex min-h-[71px] w-full max-w-6xl flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3 sm:flex-nowrap sm:gap-x-6 sm:py-0">
+    <div class="mx-auto flex min-h-[71px] w-full max-w-none flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3 sm:flex-nowrap sm:gap-x-5 sm:px-6 sm:py-0 lg:gap-x-8 lg:px-8 2xl:px-10">
         <a href="{{ route('home') }}" class="no-underline flex shrink-0 items-center gap-2" aria-label="MovieREV home">
             <img src="{{ asset('img/logo.png') }}" alt="" class="h-12 w-12 object-contain" />
             <span class="font-bebas text-2xl tracking-[0.08em] sm:text-3xl">MOVIE<span class="text-red-500">REV</span></span>
         </a>
 
-        <nav class="order-3 flex w-full items-center justify-center gap-7 font-bebas text-lg tracking-[0.08em] text-stone-300 sm:order-none sm:w-auto sm:justify-start sm:gap-6 sm:text-xl" aria-label="Primary">
+        <nav class="order-3 flex w-full items-center justify-center gap-7 font-bebas text-lg tracking-[0.08em] text-stone-300 sm:order-none sm:w-auto sm:shrink-0 sm:justify-start sm:gap-6 sm:text-xl lg:gap-8" aria-label="Primary">
             <a href="{{ route('home') }}" class="no-underline text-white transition-colors hover:text-red-400">Home</a>
             <a href="{{ route('home') }}#films" class="no-underline transition-colors hover:text-red-400">Films</a>
             <a href="{{ route('home') }}#featured" class="no-underline transition-colors hover:text-red-400">Teasers</a>
+            <a href="{{ route('home') }}#reviews-week" class="no-underline transition-colors hover:text-red-400">Reviews</a>
         </nav>
 
         <form method="GET" action="{{ route('home') }}" role="search"

@@ -24,7 +24,7 @@
 <div id="top" class="relative min-h-screen text-white [background:linear-gradient(180deg,#0a040f_0%,#13051b_46%,#07040c_100%)]">
     @include('partials.header', ['search' => ''])
 
-    <main class="relative mx-auto w-full max-w-6xl px-4 pb-16">
+    <main class="relative mx-auto w-full max-w-[1800px] px-4 pb-16 sm:px-6 lg:px-8 2xl:px-10">
         <a href="{{ route('home') }}#films" class="no-underline mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-stone-400 transition-colors hover:text-red-400">
             <span aria-hidden="true">&larr;</span> Back to films
         </a>

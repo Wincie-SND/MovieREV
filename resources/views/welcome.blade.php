@@ -8,7 +8,7 @@
 <div id="top" class="relative min-h-screen text-white [background:linear-gradient(180deg,#0a040f_0%,#13051b_46%,#07040c_100%)]">
     @include('partials.header', ['search' => $search])
 
-    <main class="relative mx-auto w-full max-w-6xl px-4 pb-16">
+    <main class="relative mx-auto w-full max-w-[1800px] px-4 pb-16 sm:px-6 lg:px-8 2xl:px-10">
         @if ($search !== '')
             <p class="mt-6 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-sm text-stone-200 backdrop-blur-sm">
                 Showing catalog matches for <strong class="text-white">“{{ $search }}”</strong>.
