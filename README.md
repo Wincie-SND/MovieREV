@@ -7,6 +7,53 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Run MovieREV with Docker
+
+Each collaborator can run a local copy of the app and its MySQL database. This keeps development data on their own computer while Docker provides the same PHP and MySQL setup for everyone.
+
+### Requirements
+
+- Git
+- Docker Desktop (or Docker Engine with the Compose plugin)
+
+### First-time setup
+
+Clone the repository after the repository owner has granted you access:
+
+```sh
+git clone https://github.com/Wincie-SND/MovieREV.git
+cd MovieREV
+```
+
+Create the local environment file, start the stack, and generate an application key:
+
+```sh
+cp .env.example .env
+docker compose -f docker/docker-compose.yml up -d --build
+docker compose -f docker/docker-compose.yml exec app php artisan key:generate
+```
+
+In PowerShell, use `Copy-Item .env.example .env` for the first command instead of `cp` if needed.
+
+Open the app and database tools at:
+
+- MovieREV: <http://localhost:8000>
+- phpMyAdmin: <http://localhost:8080> (server `db`, username `root`, password `secret`)
+- MySQL from a host database client: `127.0.0.1:3307` (database `movierev`, username `root`, password `secret`)
+
+The app source is bind-mounted, so code edits are served without rebuilding. Changes to the Docker image or Composer dependencies require `docker compose -f docker/docker-compose.yml up -d --build`.
+
+### Daily use
+
+```sh
+docker compose -f docker/docker-compose.yml up -d
+docker compose -f docker/docker-compose.yml down
+```
+
+The database is stored in a Docker volume and survives `down`. The initial SQL export is imported only when that volume is first created. `docker compose -f docker/docker-compose.yml down -v` deletes the database and Composer volume; use it only when you intentionally want to reset local Docker data.
+
+Each collaborator's Docker stack and database are separate. `.env` is local and should not be committed or shared; use `.env.example` as the shared configuration template.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

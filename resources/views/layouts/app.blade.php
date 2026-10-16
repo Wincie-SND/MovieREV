@@ -9,7 +9,7 @@
             (() => {
                 const tabKey = 'movierev-session-only-tab';
                 const logoutUrl = @json(route('logout'));
-                const loginUrl = @json(route('login'));
+                const dashboardUrl = @json(route('home'));
                 const csrfToken = @json(csrf_token());
 
                 const endSession = () => navigator.sendBeacon(logoutUrl, new URLSearchParams({ _token: csrfToken }));
@@ -24,7 +24,7 @@
                         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
                         body: body.toString(),
                         keepalive: true,
-                    }).finally(() => window.location.replace(loginUrl));
+                    }).finally(() => window.location.replace(dashboardUrl));
                 }
 
                 document.addEventListener('submit', (event) => {
