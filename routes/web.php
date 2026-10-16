@@ -6,6 +6,8 @@ use App\Http\Controllers\Admin\FilmsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\UserFollowController;
+use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -14,9 +16,17 @@ Route::get('/movies/{movie}', [MovieController::class, 'show'])
     ->whereNumber('movie')
     ->name('movies.show');
 
-// Writing reviews is a member action: the routes are behind `auth`, and the
-// controller/policy authorise the review itself once it is bound.
+Route::get('/users/{user:username}', [UserProfileController::class, 'show'])
+    ->name('users.show');
+
+// Reviews and follows are member actions, so they are available only to
+// authenticated users.
 Route::middleware('auth')->group(function () {
+    Route::post('/users/{user:username}/follow', [UserFollowController::class, 'store'])
+        ->name('users.follow');
+    Route::delete('/users/{user:username}/follow', [UserFollowController::class, 'destroy'])
+        ->name('users.unfollow');
+
     Route::post('/movies/{movie}/reviews', [ReviewController::class, 'store'])
         ->whereNumber('movie')
         ->name('reviews.store');

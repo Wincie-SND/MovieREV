@@ -54,6 +54,26 @@ The database is stored in a Docker volume and survives `down`. The initial SQL e
 
 Each collaborator's Docker stack and database are separate. `.env` is local and should not be committed or shared; use `.env.example` as the shared configuration template.
 
+### Upgrade an existing database for user follows
+
+Existing Docker database volumes do not re-import `database/movierev.sql`. After starting Docker, open phpMyAdmin, select `movierev`, choose the **SQL** tab, and run this once:
+
+```sql
+CREATE TABLE IF NOT EXISTS `user_follows` (
+  `follower_id` bigint unsigned NOT NULL,
+  `followed_id` bigint unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`follower_id`, `followed_id`),
+  KEY `user_follows_followed_id_index` (`followed_id`),
+  CONSTRAINT `user_follows_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_follows_followed_id_foreign` FOREIGN KEY (`followed_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_follows_no_self_follow` CHECK (`follower_id` <> `followed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+```
+
+The export in `database/movierev.sql` includes this table for fresh database volumes. Do not import the full export over an existing database just to add follows; it drops and recreates the app tables.
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:

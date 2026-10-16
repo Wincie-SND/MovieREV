@@ -36,10 +36,10 @@
                 <a href="{{ route('register') }}" class="no-underline rounded-full border border-white/20 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-white/10 hover:text-red-400 hover:no-underline">Sign Up</a>
                 <a href="{{ route('login') }}" class="no-underline rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Log In</a>
             @else
-                <span class="hidden items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 sm:flex">
-                    <span aria-hidden="true" class="inline-flex h-10 w-10 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-fuchsia-900 to-zinc-900 font-bebas text-lg">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
-                    <span class="max-w-[120px] truncate">{{ Auth::user()->username }}</span>
-                </span>
+                <a href="{{ route('users.show', Auth::user()->username) }}" class="no-underline flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 transition-colors hover:text-red-300" aria-label="View your profile">
+                    <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-fuchsia-900 to-zinc-900 font-bebas text-base sm:h-10 sm:w-10 sm:text-lg">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
+                    <span class="hidden max-w-[120px] truncate md:inline">{{ Auth::user()->username }}</span>
+                </a>
                 <form method="POST" action="{{ route('logout') }}" class="m-0">
                     @csrf
                     <button type="submit" class="no-underline rounded-full bg-red-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-red-600">Log Out</button>

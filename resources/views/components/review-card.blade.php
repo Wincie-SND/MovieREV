@@ -33,8 +33,15 @@
                 <h3 class="font-bebas text-2xl leading-none tracking-wide">{{ $reviewTitle }}</h3>
             @endif
             <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-stone-300">
-                <span aria-hidden="true" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ $initial }}</span>
-                <span class="truncate">{{ $displayName }}</span>
+                @if ($user)
+                    <a href="{{ route('users.show', $user->username) }}" class="no-underline inline-flex items-center gap-2 text-stone-300 transition-colors hover:text-red-300">
+                        <span aria-hidden="true" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ $initial }}</span>
+                        <span class="truncate">{{ $displayName }}</span>
+                    </a>
+                @else
+                    <span aria-hidden="true" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ $initial }}</span>
+                    <span class="truncate">{{ $displayName }}</span>
+                @endif
                 @if ($posted)
                     <span aria-hidden="true" class="text-stone-600">•</span>
                     <time datetime="{{ $posted->toDateString() }}" class="text-stone-400">{{ $posted->format('M j, Y') }}</time>

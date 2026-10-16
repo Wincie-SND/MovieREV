@@ -1,7 +1,7 @@
 -- MovieREV database
 --
--- This file is the project's complete database: the 4 application tables
--- (users, reviews, lists, list_movies) exported from the live `movierev`
+-- This file is the project's complete database: the 5 application tables
+-- (users, reviews, lists, list_movies, user_follows) exported from `movierev`
 -- database. It is kept in sync with that database.
 --
 -- The `movies` table is gone: the movie catalog is read from the TMDB API at
@@ -13,7 +13,7 @@
 -- job_batches, failed_jobs, password_reset_tokens, migrations) are
 -- deliberately NOT here: they were dropped, and the surrounding code was
 -- moved off them. Sessions, cache and the queue no longer use the database
--- (see .env / config), so these 4 tables are all the app needs to run.
+-- (see .env / config), so these 5 tables are all the app needs to run.
 --
 -- `users` combines Laravel's stock structure with movierev.sql's columns:
 --     id, name, email, email_verified_at, password, remember_token,
@@ -25,7 +25,7 @@
 --
 -- Data: only `users` (accounts created through the register form —
 -- re-export the users INSERTs after new sign-ups so this file stays in
--- sync). reviews, lists and list_movies are empty.
+-- sync). reviews, lists, list_movies and user_follows are empty.
 --
 -- To import: select the `movierev` database in phpMyAdmin and use Import,
 -- or from a shell:
@@ -72,6 +72,9 @@ CREATE TABLE `list_movies` (
 
 /*!40000 ALTER TABLE `list_movies` DISABLE KEYS */;
 /*!40000 ALTER TABLE `list_movies` ENABLE KEYS */;
+
+-- Remove the follow pivot before recreating users on a re-import.
+DROP TABLE IF EXISTS `user_follows`;
 
 --
 -- Table structure for table `lists`
@@ -161,6 +164,29 @@ CREATE TABLE `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES (2,'Jesse Rivera','jes@example.com',NULL,'$2y$12$0um933qGXk0/1E3don7Eje1rTy2EPUVj/kqcfpO0lON0vax1aeUYS','HuWxayHCUkqUj5liE8duJtd0fVoRs6oAjZ4j4MU4ckjCg60NoXyw6kc17Lfn','jes_','user','2026-10-06 12:02:53','2026-10-06 12:02:53'),(8,'Wincie Jade Breva','brevawinciejade@gmail.com',NULL,'$2y$12$Q8TGqoKDGfIz9dev7XVJvu4rJeCV2TTNKZ5lTe9.0k0P0ynEDS6yW','Ta9SLbtS3LPLEa72D2KQGKNuoMH52iyFYxZKUz5E5ylarWEnsFaCJ96Am0rI','wnc','user','2026-10-08 01:52:24','2026-10-08 01:52:24');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+--
+-- Table structure for table `user_follows`
+--
+
+CREATE TABLE `user_follows` (
+  `follower_id` bigint unsigned NOT NULL,
+  `followed_id` bigint unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`follower_id`,`followed_id`),
+  KEY `user_follows_followed_id_index` (`followed_id`),
+  CONSTRAINT `user_follows_follower_id_foreign` FOREIGN KEY (`follower_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_follows_followed_id_foreign` FOREIGN KEY (`followed_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `user_follows_no_self_follow` CHECK (`follower_id` <> `followed_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_follows`
+--
+
+/*!40000 ALTER TABLE `user_follows` DISABLE KEYS */;
+/*!40000 ALTER TABLE `user_follows` ENABLE KEYS */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
