@@ -34,7 +34,7 @@
         </h1>
 
         {{-- Sign-up card --}}
-        <form method="POST" action="{{ route('register.store') }}"
+        <form method="POST" action="{{ route('register.store') }}" data-register-form
               class="absolute left-[659px] top-[70px] w-[455px] min-h-[575px] bg-[#150017] rounded-xl flex flex-col">
             @csrf
 
@@ -175,6 +175,10 @@
     </div>
 </div>
 <script>
+    document.querySelector('[data-register-form]')?.addEventListener('submit', () => {
+        sessionStorage.setItem('movierev-session-only-tab', 'active');
+    });
+
     document.querySelectorAll('[data-password-toggle]').forEach((toggleButton) => {
         const passwordInput = toggleButton.closest('.relative').querySelector('input');
         toggleButton.addEventListener('click', () => {

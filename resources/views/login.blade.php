@@ -34,20 +34,18 @@
         </h1>
 
         {{-- Sign-in card --}}
-        <form method="POST" action="{{ route('login.attempt') }}"
-              class="absolute left-[659px] top-[70px] w-[455px] min-h-[575px] bg-[#150017] rounded-xl flex flex-col">
+        <form method="POST" action="{{ route('login.attempt') }}" data-login-form
+              class="absolute left-[659px] top-[70px] w-[455px] min-h-[575px] bg-[#150017] rounded-xl flex flex-col justify-center">
             @csrf
 
             {{-- Brand mark. The PNG is a 500x500 canvas with ~12% transparent padding
                  on every side, so a 72px box renders the mark itself at ~56px. --}}
             <img src="{{ asset('img/logo.png') }}" alt="MovieREV"
-                 class="mx-auto mt-[22px] block w-[72px] h-[72px] shrink-0 object-contain"/>
+                 class="mx-auto mt-[25px] block w-[72px] h-[72px] shrink-0 object-contain"/>
 
             <h2 class="m-0 pt-[10px] text-center text-white text-4xl font-bold leading-[1.15] [font-family:'Playfair_Display',Georgia,serif]">Sign In</h2>
 
-            {{-- `my-auto` absorbs the height difference between this shorter form
-                 and the 5-field sign-up form, so both cards render identically. --}}
-            <div class="my-auto flex flex-col items-center gap-[9px] pt-[24px]">
+            <div class="flex flex-col items-center gap-[9px] pt-[24px]">
                 {{-- Email or username --}}
                 <div>
                     <label for="identifier" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Email or Username</label>
@@ -116,6 +114,17 @@
     </div>
 </div>
 <script>
+    document.querySelector('[data-login-form]')?.addEventListener('submit', (event) => {
+        const tabKey = 'movierev-session-only-tab';
+        const remember = event.currentTarget.querySelector('input[name="remember"]')?.checked;
+
+        if (remember) {
+            sessionStorage.removeItem(tabKey);
+        } else {
+            sessionStorage.setItem(tabKey, 'active');
+        }
+    });
+
     document.querySelectorAll('[data-password-toggle]').forEach((toggleButton) => {
         const passwordInput = toggleButton.closest('.relative').querySelector('input');
         toggleButton.addEventListener('click', () => {

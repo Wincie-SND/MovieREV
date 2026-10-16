@@ -3,6 +3,52 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    @if (Auth::check() && session('session_only_login'))
+        <meta name="csrf-token" content="{{ csrf_token() }}">
+        <script>
+            (() => {
+                const tabKey = 'movierev-session-only-tab';
+                const logoutUrl = @json(route('logout'));
+                const loginUrl = @json(route('login'));
+                const csrfToken = @json(csrf_token());
+
+                const endSession = () => navigator.sendBeacon(logoutUrl, new URLSearchParams({ _token: csrfToken }));
+
+                if (sessionStorage.getItem(tabKey) !== 'active') {
+                    document.documentElement.style.visibility = 'hidden';
+                    const body = new URLSearchParams({ _token: csrfToken });
+
+                    fetch(logoutUrl, {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                        body: body.toString(),
+                        keepalive: true,
+                    }).finally(() => window.location.replace(loginUrl));
+                }
+
+                document.addEventListener('submit', (event) => {
+                    const form = event.target;
+                    if (form instanceof HTMLFormElement && new URL(form.action, location.href).origin !== location.origin && form.target !== '_blank') {
+                        sessionStorage.removeItem(tabKey);
+                        endSession();
+                    }
+                }, true);
+
+                document.addEventListener('click', (event) => {
+                    const link = event.target.closest('a[href]');
+                    if (!link || (link.target && link.target !== '_self')) return;
+
+                    try {
+                        if (new URL(link.href, location.href).origin !== location.origin) {
+                            sessionStorage.removeItem(tabKey);
+                            endSession();
+                        }
+                    } catch (_) {}
+                }, true);
+            })();
+        </script>
+    @endif
     <title>@yield('title', 'MovieREV')</title>
     <link rel="icon" type="image/png" href="{{ asset('img/1449066-1.png') }}">
     <link rel="stylesheet" href="{{ asset('globals.css') }}">

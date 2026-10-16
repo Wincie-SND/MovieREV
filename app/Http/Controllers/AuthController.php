@@ -61,6 +61,12 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        if ($remember) {
+            $request->session()->forget('session_only_login');
+        } else {
+            $request->session()->put('session_only_login', true);
+        }
+
         if (Auth::user()->usertype === 'admin') {
             return redirect()->route('admin.dashboard');
         }
@@ -107,6 +113,7 @@ class AuthController extends Controller
         Auth::login($user);
 
         $request->session()->regenerate();
+        $request->session()->put('session_only_login', true);
 
         return redirect('/')->with('status', 'Successfully created an account');
     }
