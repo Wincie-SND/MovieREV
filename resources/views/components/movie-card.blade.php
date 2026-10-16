@@ -17,7 +17,7 @@
         <x-poster-art :title="$movie->title" subtitle="No poster on TMDB" />
     @endif
     <div class="p-3">
-        <h3 class="font-bebas text-xl leading-none tracking-wide transition-colors group-hover:text-red-400">{{ $movie->title }}</h3>
+        <h3 class="font-bebas text-xl leading-none tracking-wide text-white">{{ $movie->title }}</h3>
         @if ($details !== '')
             <p class="mt-1 text-[11px] uppercase tracking-[0.18em] text-stone-400">{{ $details }}</p>
         @endif
