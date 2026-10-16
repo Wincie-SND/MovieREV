@@ -74,6 +74,59 @@ class TmdbClient
     }
 
     /**
+     * Browse one page of the TMDB catalog for the admin film list.
+     *
+     * @return array{movies: Collection<int, TmdbMovie>, page: int, total_pages: int, total_results: int, genres: array<int, string>}
+     */
+    public function browse(string $term = '', int $page = 1, ?int $genreId = null): array
+    {
+        $page = max(1, min(500, $page));
+        $term = trim($term);
+        $genres = $this->genres();
+        $path = $term !== '' ? '/search/movie' : ($genreId ? '/discover/movie' : '/movie/popular');
+        $query = ['page' => $page];
+
+        if ($term !== '') {
+            $query['query'] = $term;
+        }
+
+        if ($genreId && isset($genres[$genreId])) {
+            if ($term === '') {
+                $query['with_genres'] = $genreId;
+            }
+        }
+
+        if (! $this->isConfigured()) {
+            return [
+                'movies' => collect(),
+                'page' => 1,
+                'total_pages' => 0,
+                'total_results' => 0,
+                'genres' => $genres,
+            ];
+        }
+
+        $payload = $this->payload($path, $query);
+        $rows = $payload['results'] ?? [];
+
+        if (! is_array($rows)) {
+            $rows = [];
+        }
+
+        if ($genreId && $term !== '') {
+            $rows = array_values(array_filter($rows, fn (array $movie): bool => in_array($genreId, $movie['genre_ids'] ?? [], false)));
+        }
+
+        return [
+            'movies' => $this->collection($rows, 20),
+            'page' => (int) ($payload['page'] ?? $page),
+            'total_pages' => (int) ($payload['total_pages'] ?? 0),
+            'total_results' => (int) ($payload['total_results'] ?? 0),
+            'genres' => $genres,
+        ];
+    }
+
+    /**
      * One film with everything the detail page renders: details, credits,
      * certifications and similar films, in a single round trip.
      *

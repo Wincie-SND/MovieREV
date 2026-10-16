@@ -61,6 +61,10 @@ class AuthController extends Controller
 
         $request->session()->regenerate();
 
+        if (Auth::user()->usertype === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
         return redirect()->intended('/');
     }
 

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\FilmsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
@@ -35,3 +37,11 @@ Route::middleware('guest')->group(function () {
 });
 
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
+
+Route::get('/admin/dashboard', DashboardController::class)
+    ->middleware('auth')
+    ->name('admin.dashboard');
+
+Route::get('/admin/films', FilmsController::class)
+    ->middleware('auth')
+    ->name('admin.films');
