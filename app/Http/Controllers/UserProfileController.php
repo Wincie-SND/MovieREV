@@ -13,6 +13,7 @@ class UserProfileController extends Controller
     {
         $recentReviews = Review::query()
             ->where('user_id', $user->id)
+            ->withLikeState(auth()->id())
             ->orderByDesc('created_at')
             ->limit(6)
             ->get();

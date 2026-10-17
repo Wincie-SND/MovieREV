@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\FilmsController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
+use App\Http\Controllers\ReviewLikeController;
 use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\UserMovieListController;
 use App\Http\Controllers\UserProfileController;
@@ -49,6 +50,11 @@ Route::middleware('auth')->group(function () {
 
     Route::delete('/reviews/{review}', [ReviewController::class, 'destroy'])
         ->name('reviews.destroy');
+
+    Route::post('/reviews/{review}/likes', [ReviewLikeController::class, 'store'])
+        ->name('reviews.like');
+    Route::delete('/reviews/{review}/likes', [ReviewLikeController::class, 'destroy'])
+        ->name('reviews.unlike');
 });
 
 Route::middleware('guest')->group(function () {

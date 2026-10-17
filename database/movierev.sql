@@ -1,7 +1,7 @@
 -- MovieREV database
 --
--- This file is the project's complete database: the 5 application tables
--- (users, reviews, lists, list_movies, user_follows) exported from `movierev`
+-- This file is the project's complete database: the 6 application tables
+-- (users, reviews, review_likes, lists, list_movies, user_follows) exported from `movierev`
 -- database. It is kept in sync with that database.
 --
 -- The `movies` table is gone: the movie catalog is read from the TMDB API at
@@ -13,7 +13,7 @@
 -- job_batches, failed_jobs, password_reset_tokens, migrations) are
 -- deliberately NOT here: they were dropped, and the surrounding code was
 -- moved off them. Sessions, cache and the queue no longer use the database
--- (see .env / config), so these 5 tables are all the app needs to run.
+-- (see .env / config), so these 6 tables are all the app needs to run.
 --
 -- `users` combines Laravel's stock structure with movierev.sql's columns:
 --     id, name, email, email_verified_at, password, remember_token,
@@ -25,7 +25,7 @@
 --
 -- Data: only `users` (accounts created through the register form —
 -- re-export the users INSERTs after new sign-ups so this file stays in
--- sync). reviews, lists, list_movies and user_follows are empty.
+-- sync). reviews, review_likes, lists, list_movies and user_follows are empty.
 --
 -- To import: select the `movierev` database in phpMyAdmin and use Import,
 -- or from a shell:
@@ -105,6 +105,7 @@ CREATE TABLE `lists` (
 -- Table structure for table `reviews`
 --
 
+DROP TABLE IF EXISTS `review_likes`;
 DROP TABLE IF EXISTS `reviews`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
@@ -164,6 +165,29 @@ CREATE TABLE `users` (
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES (2,'Jesse Rivera','jes@example.com',NULL,'$2y$12$0um933qGXk0/1E3don7Eje1rTy2EPUVj/kqcfpO0lON0vax1aeUYS','HuWxayHCUkqUj5liE8duJtd0fVoRs6oAjZ4j4MU4ckjCg60NoXyw6kc17Lfn','jes_','user','2026-10-06 12:02:53','2026-10-06 12:02:53'),(8,'Wincie Jade Breva','brevawinciejade@gmail.com',NULL,'$2y$12$Q8TGqoKDGfIz9dev7XVJvu4rJeCV2TTNKZ5lTe9.0k0P0ynEDS6yW','Ta9SLbtS3LPLEa72D2KQGKNuoMH52iyFYxZKUz5E5ylarWEnsFaCJ96Am0rI','wnc','user','2026-10-08 01:52:24','2026-10-08 01:52:24');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
+
+--
+-- Table structure for table `review_likes`
+--
+
+CREATE TABLE `review_likes` (
+  `review_id` int NOT NULL,
+  `user_id` bigint unsigned NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL,
+  PRIMARY KEY (`review_id`,`user_id`),
+  KEY `review_likes_user_id_index` (`user_id`),
+  CONSTRAINT `review_likes_review_id_foreign` FOREIGN KEY (`review_id`) REFERENCES `reviews` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `review_likes_user_id_foreign` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `review_likes`
+--
+
+/*!40000 ALTER TABLE `review_likes` DISABLE KEYS */;
+/*!40000 ALTER TABLE `review_likes` ENABLE KEYS */;
 
 --
 -- Table structure for table `user_follows`
