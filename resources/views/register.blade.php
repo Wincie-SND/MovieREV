@@ -47,7 +47,7 @@
 
             <div class="flex flex-col items-center gap-[9px] pt-[24px]">
                 {{-- Name --}}
-                <div>
+                <div class="w-80">
                     <label for="name" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Name</label>
                     <input
                         type="text"
@@ -57,15 +57,16 @@
                         placeholder="Your name"
                         autocomplete="name"
                         autofocus
-                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        @error('name') aria-invalid="true" aria-describedby="name-error" @enderror
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500 @error('name') ring-1 ring-red-500 @enderror"
                     />
                     @error('name')
-                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                        <p id="name-error" role="alert" class="m-0 mt-[3px] w-full break-words text-red-400 text-[10px] leading-4 [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Email --}}
-                <div>
+                <div class="w-80">
                     <label for="email" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Email</label>
                     <input
                         type="email"
@@ -74,15 +75,16 @@
                         value="{{ old('email') }}"
                         placeholder="you@example.com"
                         autocomplete="email"
-                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        @error('email') aria-invalid="true" aria-describedby="email-error" @enderror
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500 @error('email') ring-1 ring-red-500 @enderror"
                     />
                     @error('email')
-                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                        <p id="email-error" role="alert" class="m-0 mt-[3px] w-full break-words text-red-400 text-[10px] leading-4 [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Username --}}
-                <div>
+                <div class="w-80">
                     <label for="username" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Username</label>
                     <input
                         type="text"
@@ -91,15 +93,16 @@
                         value="{{ old('username') }}"
                         placeholder="username"
                         autocomplete="username"
-                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                        @error('username') aria-invalid="true" aria-describedby="username-error" @enderror
+                        class="w-80 h-8 bg-[#2A0A2E] border-0 px-[23px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500 @error('username') ring-1 ring-red-500 @enderror"
                     />
                     @error('username')
-                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                        <p id="username-error" role="alert" class="m-0 mt-[3px] w-full break-words text-red-400 text-[10px] leading-4 [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Password --}}
-                <div>
+                <div class="w-80">
                     <label for="password" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Password</label>
                     <div class="relative w-80">
                         <input
@@ -108,7 +111,8 @@
                             name="password"
                             placeholder="8+ characters, a capital & symbol"
                             autocomplete="new-password"
-                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                            @error('password') aria-invalid="true" aria-describedby="password-error" @enderror
+                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500 @error('password') ring-1 ring-red-500 @enderror"
                         />
                         <button
                             type="button"
@@ -127,12 +131,12 @@
                         </button>
                     </div>
                     @error('password')
-                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                        <p id="password-error" role="alert" class="m-0 mt-[3px] w-full break-words text-red-400 text-[10px] leading-4 [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
                     @enderror
                 </div>
 
                 {{-- Confirm password --}}
-                <div>
+                <div class="w-80">
                     <label for="password_confirmation" class="block mb-[1px] text-stone-300 text-[8px] font-bold uppercase leading-[14px] tracking-[1px] [font-family:'Inter',Helvetica,sans-serif]">Confirm Password</label>
                     <div class="relative w-80">
                         <input
@@ -141,7 +145,8 @@
                             name="password_confirmation"
                             placeholder="Re enter password"
                             autocomplete="new-password"
-                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
+                            @error('password_confirmation') aria-invalid="true" aria-describedby="password-confirmation-error" @enderror
+                            class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500 @error('password_confirmation') ring-1 ring-red-500 @enderror"
                         />
                         <button
                             type="button"
@@ -160,7 +165,7 @@
                         </button>
                     </div>
                     @error('password_confirmation')
-                        <p class="m-0 mt-[3px] text-red-400 text-[10px] [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
+                        <p id="password-confirmation-error" role="alert" class="m-0 mt-[3px] w-full break-words text-red-400 text-[10px] leading-4 [font-family:'Inter',Helvetica,sans-serif]">{{ $message }}</p>
                     @enderror
                 </div>
 
