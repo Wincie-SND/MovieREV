@@ -7,6 +7,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cookie;
+use Illuminate\Validation\Rules\Password;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -98,9 +99,11 @@ class AuthController extends Controller
                 'unique:users,username',
             ],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'password' => ['required', 'string', Password::min(8)->uppercase()->symbols(), 'confirmed'],
         ], [
             'username.regex' => 'Usernames may only contain letters, numbers, dots, dashes and underscores.',
+            'password.uppercase' => 'Password must include at least one capital letter.',
+            'password.symbols' => 'Password must include at least one special character.',
         ]);
 
         // The `hashed` cast encrypts the password, and `usertype` falls back
