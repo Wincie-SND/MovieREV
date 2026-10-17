@@ -99,10 +99,11 @@ class AuthController extends Controller
                 'unique:users,username',
             ],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
-            'password' => ['required', 'string', Password::min(8)->uppercase()->symbols(), 'confirmed'],
+            'password' => ['required', 'string', Password::min(8)->symbols(), 'regex:/[A-Z]/', 'confirmed'],
         ], [
             'username.regex' => 'Usernames may only contain letters, numbers, dots, dashes and underscores.',
-            'password.uppercase' => 'Password must include at least one capital letter.',
+            'email.unique' => 'This email address is already registered.',
+            'password.regex' => 'Password must include at least one capital letter.',
             'password.symbols' => 'Password must include at least one special character.',
         ]);
 
