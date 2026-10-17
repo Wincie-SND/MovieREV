@@ -19,6 +19,7 @@
         @if (session('status'))
             <p role="status" class="mb-6 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-200">{{ session('status') }}</p>
         @endif
+        @error('email_delivery')<p role="alert" class="mb-6 rounded-xl border border-red-500/20 bg-red-500/10 px-4 py-3 text-sm text-red-200">{{ $message }}</p>@enderror
 
         <section aria-labelledby="profile-settings-heading">
             <div class="mb-4">
@@ -37,7 +38,7 @@
                 @csrf
                 @method('PUT')
 
-                <div class="flex flex-col gap-7 p-5 sm:flex-row sm:items-start sm:p-7">
+                <div class="flex flex-col gap-7 px-5 pt-5 pb-2 sm:flex-row sm:items-start sm:px-7 sm:pt-7 sm:pb-2">
                     <div class="flex shrink-0 flex-col items-center gap-3 sm:items-start">
                         <label for="profile_photo" class="group relative flex h-28 w-28 cursor-pointer items-center justify-center" aria-label="Choose a profile picture">
                             <span class="relative flex h-full w-full items-center justify-center overflow-hidden rounded-full border-2 border-white/15 bg-gradient-to-br from-fuchsia-800 to-indigo-950 font-bebas text-5xl text-white shadow-lg transition group-hover:border-red-400/70">
@@ -81,7 +82,7 @@
                     </div>
                 </div>
 
-                <div class="flex flex-col-reverse gap-3 border-t border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-7">
+                <div class="flex flex-col-reverse gap-3 border-t border-white/10 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-7">
                     <a href="{{ route('users.show', $user->username) }}" class="text-center text-xs font-semibold text-stone-400 transition-colors hover:text-white">View profile</a>
                     <div class="flex flex-col-reverse gap-3 sm:flex-row sm:items-center">
                         @if ($profilePhotoUrl)
@@ -101,21 +102,21 @@
 
             <div class="space-y-4">
                 <article class="overflow-hidden rounded-xl border border-white/10 bg-[#10020d]/85 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.9)]">
-                    <div class="px-5 py-5 sm:px-6">
+                    <div class="px-5 pt-5 pb-1 sm:px-6">
                         <h3 class="m-0 text-sm font-bold text-white">Password</h3>
                         <p class="mt-1 text-sm text-stone-400">Update the password you use to sign in.</p>
                     </div>
-                    <div class="border-t border-white/10 px-5 py-4 sm:px-6">
+                    <div class="border-t border-white/10 px-5 py-3 sm:px-6">
                         <a href="{{ route('settings.password.edit') }}" class="inline-flex items-center justify-center rounded-full border-0 bg-red-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-red-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300 focus-visible:ring-offset-2 focus-visible:ring-offset-[#10020d]">Change Password</a>
                     </div>
                 </article>
 
                 <article class="overflow-hidden rounded-xl border border-white/10 bg-[#10020d]/85 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.9)]">
-                    <div class="px-5 py-5 sm:px-6">
+                    <div class="px-5 pt-5 pb-1 sm:px-6">
                         <h3 class="m-0 text-sm font-bold text-white">Email</h3>
                         <p class="mt-1 text-sm text-stone-400">Update the email address associated with your account.</p>
                     </div>
-                    <div class="flex flex-col gap-4 border-t border-white/10 px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+                    <div class="flex flex-col gap-4 border-t border-white/10 px-5 py-3 sm:flex-row sm:items-center sm:justify-between sm:px-6">
                         <div class="flex min-w-0 flex-wrap items-center gap-x-5 gap-y-3">
                             <div class="flex min-w-0 items-center gap-2">
                                 <span class="max-w-full truncate text-sm text-stone-200">{{ $user->email }}</span>

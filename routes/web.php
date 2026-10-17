@@ -39,8 +39,14 @@ Route::middleware('auth')->group(function () {
     Route::put('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
     Route::get('/settings/email', [UserSettingsController::class, 'showEmailForm'])->name('settings.email.edit');
     Route::put('/settings/email', [UserSettingsController::class, 'updateEmail'])->name('settings.email.update');
+    Route::post('/settings/email/verification-code', [UserSettingsController::class, 'sendEmailChangeCode'])
+        ->middleware('throttle:3,10')
+        ->name('settings.email.code');
     Route::get('/settings/password', [UserSettingsController::class, 'showPasswordForm'])->name('settings.password.edit');
     Route::put('/settings/password', [UserSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::post('/settings/password/verification-code', [UserSettingsController::class, 'sendPasswordChangeCode'])
+        ->middleware('throttle:3,10')
+        ->name('settings.password.code');
     Route::post('/settings/email/verification-notification', [UserSettingsController::class, 'sendVerificationEmail'])
         ->middleware('throttle:6,1')
         ->name('verification.send');
