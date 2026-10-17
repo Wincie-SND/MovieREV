@@ -14,6 +14,7 @@ class MoviePageTest extends TestCase
     {
         parent::setUp();
 
+        Schema::dropIfExists('review_likes');
         Schema::dropIfExists('reviews');
         Schema::dropIfExists('users');
 
@@ -42,6 +43,13 @@ class MoviePageTest extends TestCase
             $table->timestamp('updated_at')->nullable();
 
             $table->unique(['user_id', 'tmdb_id']);
+        });
+
+        Schema::create('review_likes', function ($table): void {
+            $table->foreignId('review_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
+            $table->primary(['review_id', 'user_id']);
         });
 
         config()->set('services.tmdb.key', 'test-key');

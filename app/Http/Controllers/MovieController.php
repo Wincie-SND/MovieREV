@@ -37,7 +37,7 @@ class MovieController extends Controller
             abort(404, 'That film is not in the TMDB catalog.');
         }
 
-        $reviews = $this->reviews($movie);
+        $reviews = $this->reviews($movie, $request->user()?->id);
         $user = $request->user();
 
         $myReview = $user === null
@@ -96,11 +96,12 @@ class MovieController extends Controller
      *
      * @return Collection<int, Review>
      */
-    private function reviews(int $tmdbId): Collection
+    private function reviews(int $tmdbId, ?int $userId): Collection
     {
         try {
             return Review::query()
                 ->with('user')
+                ->withLikeState($userId)
                 ->where('tmdb_id', $tmdbId)
                 ->orderByDesc('created_at')
                 ->orderByDesc('id')
