@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -111,6 +112,15 @@ class AuthController extends Controller
         // to the column default ('user') since we never pass it here.
         $user = User::create($credentials);
 
+        $verificationEmailSent = true;
+
+        try {
+            event(new Registered($user));
+        } catch (\Throwable $exception) {
+            report($exception);
+            $verificationEmailSent = false;
+        }
+
         // The register form has no "Remember me" option, so sign the new user
         // in for this session only. Passing `true` here would hand out a
         // persistent recaller cookie they never opted into.
@@ -119,7 +129,12 @@ class AuthController extends Controller
         $request->session()->regenerate();
         $request->session()->put('session_only_login', true);
 
-        return redirect('/')->with('status', 'Successfully created an account');
+        return redirect('/')->with(
+            'status',
+            $verificationEmailSent
+                ? 'Successfully created an account'
+                : 'Account created, but the verification email could not be sent. You can request another from Settings.',
+        );
     }
 
     /**
