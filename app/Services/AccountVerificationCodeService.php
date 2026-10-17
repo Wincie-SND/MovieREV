@@ -34,7 +34,7 @@ class AccountVerificationCodeService
         Cache::put($this->attemptsKey($user, $purpose), 0, $expiresAt);
 
         try {
-            Mail::to($recipient)->send(new AccountVerificationCodeMail($code, $purpose));
+            Mail::to($recipient)->send(new AccountVerificationCodeMail($code, $purpose, $user->name));
         } catch (Throwable $exception) {
             $this->forget($user, $purpose);
 
