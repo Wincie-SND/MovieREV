@@ -4,6 +4,7 @@
 
 @section('content')
     @include('partials.backdrop')
+    @php($profilePhotoUrl = $profile->profilePhotoUrl())
 
 <div id="top" class="relative min-h-screen text-white [background:linear-gradient(180deg,#0a040f_0%,#13051b_46%,#07040c_100%)]">
     @include('partials.header', ['search' => ''])
@@ -16,8 +17,12 @@
         <section class="relative mt-6 overflow-hidden rounded-2xl border border-white/10 bg-[#10020d]/85 shadow-[0_30px_70px_-40px_rgba(0,0,0,0.9)] backdrop-blur-sm">
             <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgba(147,51,234,0.24),transparent_48%),linear-gradient(120deg,rgba(49,16,72,0.75),rgba(8,3,13,0.95))]" aria-hidden="true"></div>
             <div class="relative flex flex-col gap-6 p-6 sm:flex-row sm:items-center sm:p-9">
-                <div aria-hidden="true" class="flex h-28 w-28 shrink-0 items-center justify-center rounded-full border-4 border-white/10 bg-gradient-to-br from-fuchsia-700 to-indigo-950 font-bebas text-5xl shadow-xl sm:h-36 sm:w-36">
-                    {{ mb_strtoupper(mb_substr(trim($profile->username), 0, 1)) }}
+                <div class="relative flex h-28 w-28 shrink-0 items-center justify-center overflow-hidden rounded-full border-4 border-white/10 bg-gradient-to-br from-fuchsia-700 to-indigo-950 font-bebas text-5xl shadow-xl sm:h-36 sm:w-36">
+                    @if ($profilePhotoUrl)
+                        <img src="{{ $profilePhotoUrl }}" alt="{{ $profile->username }} profile picture" class="absolute inset-0 h-full w-full object-cover">
+                    @else
+                        <span aria-hidden="true">{{ mb_strtoupper(mb_substr(trim($profile->username), 0, 1)) }}</span>
+                    @endif
                 </div>
 
                 <div class="min-w-0 flex-1">
