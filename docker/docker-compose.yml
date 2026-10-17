@@ -3,6 +3,7 @@ services:
     build:
       context: ..                    # repo root (paths are relative to this file's folder)
       dockerfile: docker/dockerfile
+    container_name: MovieREV
     ports:
       - "8000:8000"
     env_file:
