@@ -93,22 +93,27 @@
                 <div class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($recentReviews as $review)
                         @php($poster = $review->posterSource())
-                        <a href="{{ route('movies.show', $review->tmdb_id) }}" class="no-underline group overflow-hidden rounded-xl border border-white/10 bg-[#2A0A2E]/60 transition-colors hover:border-red-500/40">
-                            @if ($poster)
-                                <img src="{{ $poster }}" alt="{{ $review->movie_title }} poster" class="aspect-[16/9] w-full object-cover" loading="lazy" />
-                            @else
-                                <div class="flex aspect-[16/9] items-center justify-center bg-gradient-to-br from-fuchsia-950 to-zinc-950 px-5 text-center font-bebas text-2xl text-white/70">{{ $review->movie_title }}</div>
-                            @endif
-                            <div class="p-4">
-                                <h3 class="m-0 truncate font-bebas text-2xl tracking-wide text-white group-hover:text-red-300">{{ $review->movie_title }}</h3>
-                                <div class="mt-2"><x-rating-stars :value="$review->rating" /></div>
-                                @if ($review->title)
-                                    <p class="mt-2 truncate text-sm font-semibold text-stone-200">{{ $review->title }}</p>
+                        <article class="group overflow-hidden rounded-xl border border-white/10 bg-[#2A0A2E]/60 transition-colors hover:border-red-500/40">
+                            <a href="{{ route('movies.show', $review->tmdb_id) }}" class="no-underline block">
+                                @if ($poster)
+                                    <img src="{{ $poster }}" alt="{{ $review->movie_title }} poster" class="aspect-[16/9] w-full object-cover" loading="lazy" />
+                                @else
+                                    <div class="flex aspect-[16/9] items-center justify-center bg-gradient-to-br from-fuchsia-950 to-zinc-950 px-5 text-center font-bebas text-2xl text-white/70">{{ $review->movie_title }}</div>
                                 @endif
-                                <p class="mt-2 line-clamp-2 text-xs leading-relaxed text-stone-400">{{ $review->body ?: 'No written review yet.' }}</p>
-                                <time datetime="{{ $review->created_at->toDateString() }}" class="mt-3 block text-[10px] uppercase tracking-[0.14em] text-stone-500">{{ $review->created_at->format('M j, Y') }}</time>
+                                <div class="p-4">
+                                    <h3 class="m-0 truncate font-bebas text-2xl tracking-wide text-white group-hover:text-red-300">{{ $review->movie_title }}</h3>
+                                    <div class="mt-2"><x-rating-stars :value="$review->rating" /></div>
+                                    @if ($review->title)
+                                        <p class="mt-2 truncate text-sm font-semibold text-stone-200">{{ $review->title }}</p>
+                                    @endif
+                                    <p class="mt-2 line-clamp-2 text-xs leading-relaxed text-stone-400">{{ $review->body ?: 'No written review yet.' }}</p>
+                                    <time datetime="{{ $review->created_at->toDateString() }}" class="mt-3 block text-[10px] uppercase tracking-[0.14em] text-stone-500">{{ $review->created_at->format('M j, Y') }}</time>
+                                </div>
+                            </a>
+                            <div class="px-4 pb-4">
+                                <x-review-like-button :review="$review" />
                             </div>
-                        </a>
+                        </article>
                     @endforeach
                 </div>
             @else

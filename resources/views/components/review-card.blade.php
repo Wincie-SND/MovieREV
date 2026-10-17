@@ -65,6 +65,8 @@
         @endif
     </p>
 
+    <x-review-like-button :review="$review" />
+
     @if ($isOwner)
         <div class="mt-4 flex flex-wrap items-center gap-4 border-t border-white/10 pt-3">
             <a href="{{ route('movies.show', $review->tmdb_id) }}?edit={{ $review->id }}#write-review"

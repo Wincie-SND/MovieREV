@@ -52,6 +52,17 @@ class User extends Authenticatable
     }
 
     /**
+     * Reviews this member has liked.
+     *
+     * @return BelongsToMany<Review, $this>
+     */
+    public function likedReviews(): BelongsToMany
+    {
+        return $this->belongsToMany(Review::class, 'review_likes', 'user_id', 'review_id')
+            ->withTimestamps();
+    }
+
+    /**
      * Get the attributes that should be cast.
      *
      * @return array<string, string>

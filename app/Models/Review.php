@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 /**
  * A member's review of a TMDB movie.
@@ -37,6 +38,33 @@ class Review extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Members who liked this review.
+     *
+     * @return BelongsToMany<User, $this>
+     */
+    public function likes(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'review_likes', 'review_id', 'user_id')
+            ->withTimestamps();
+    }
+
+    /**
+     * Include the like count and, when signed in, whether that member liked
+     * each review.
+     *
+     * @param  Builder<$this>  $query
+     * @return Builder<$this>
+     */
+    public function scopeWithLikeState(Builder $query, ?int $userId): Builder
+    {
+        return $query
+            ->withCount('likes')
+            ->when($userId !== null, fn (Builder $query): Builder => $query->withExists([
+                'likes as liked_by_current_user' => fn (Builder $likes): Builder => $likes->where('users.id', $userId),
+            ]));
     }
 
     /**

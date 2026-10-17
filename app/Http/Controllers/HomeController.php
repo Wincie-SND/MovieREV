@@ -33,7 +33,7 @@ class HomeController extends Controller
             'featuredMovie' => $movies->first(),
             'popularMovies' => $movies->take(4),
             'recentlyReleasedMovies' => $this->attempt(fn (): Collection => $tmdb->nowPlaying(5)),
-            'recentReviews' => $this->recentReviews($search),
+            'recentReviews' => $this->recentReviews($search, $request->user()?->id),
             'movieCount' => $movies->count(),
         ]);
     }
@@ -66,11 +66,15 @@ class HomeController extends Controller
      *
      * @return Collection<int, Review>
      */
-    private function recentReviews(string $search): Collection
+    private function recentReviews(string $search, ?int $userId): Collection
     {
         return $this->attempt(fn (): Collection => Review::query()
             ->with('user')
+            ->withLikeState($userId)
+            ->has('likes')
             ->when($search !== '', fn ($query) => $query->search($search))
+            ->orderByDesc('likes_count')
+            ->orderByDesc('created_at')
             ->orderByDesc('id')
             ->limit(4)
             ->get());
