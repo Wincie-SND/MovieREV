@@ -9,8 +9,10 @@ use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\ReviewLikeController;
 use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\UserMovieListController;
+use App\Http\Controllers\UserAvatarController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserSettingsController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -21,12 +23,28 @@ Route::get('/movies/{movie}', [MovieController::class, 'show'])
 
 Route::get('/users/{user:username}', [UserProfileController::class, 'show'])
     ->name('users.show');
+Route::get('/users/{user:username}/avatar', UserAvatarController::class)
+    ->name('users.avatar');
+
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+
+    return to_route('settings')->with('status', 'Email address verified.');
+})->middleware(['auth', 'signed', 'throttle:6,1'])->name('verification.verify');
 
 // Account settings, reviews and follows are member actions, so they are
 // available only to authenticated users.
 Route::middleware('auth')->group(function () {
     Route::get('/settings', [UserSettingsController::class, 'show'])->name('settings');
     Route::put('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
+    Route::get('/settings/email', [UserSettingsController::class, 'showEmailForm'])->name('settings.email.edit');
+    Route::put('/settings/email', [UserSettingsController::class, 'updateEmail'])->name('settings.email.update');
+    Route::get('/settings/password', [UserSettingsController::class, 'showPasswordForm'])->name('settings.password.edit');
+    Route::put('/settings/password', [UserSettingsController::class, 'updatePassword'])->name('settings.password.update');
+    Route::post('/settings/email/verification-notification', [UserSettingsController::class, 'sendVerificationEmail'])
+        ->middleware('throttle:6,1')
+        ->name('verification.send');
+    Route::delete('/settings/photo', [UserSettingsController::class, 'destroyPhoto'])->name('settings.photo.destroy');
 
     Route::get('/my-lists', [UserMovieListController::class, 'index'])->name('movie-lists.index');
     Route::post('/movies/{movie}/lists/{list}', [UserMovieListController::class, 'store'])

@@ -1,6 +1,13 @@
 <div class="profile-dropdown relative" data-profile-dropdown>
+    @php($accountPhotoUrl = Auth::user()->profilePhotoUrl())
     <button type="button" class="flex cursor-pointer items-center gap-2 border-0 bg-transparent p-0 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 transition-colors hover:text-red-300" aria-label="Open account menu" aria-expanded="false" aria-controls="account-menu-panel" data-profile-menu-toggle>
-        <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-fuchsia-900 to-zinc-900 font-bebas text-base sm:h-10 sm:w-10 sm:text-lg">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
+        <span aria-hidden="true" class="relative inline-flex h-8 w-8 items-center justify-center overflow-hidden rounded-full border border-white/15 bg-gradient-to-br from-fuchsia-900 to-zinc-900 font-bebas text-base sm:h-10 sm:w-10 sm:text-lg">
+            @if ($accountPhotoUrl)
+                <img src="{{ $accountPhotoUrl }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+            @else
+                {{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}
+            @endif
+        </span>
         <span class="hidden max-w-[120px] truncate md:inline">{{ Auth::user()->username }}</span>
         <svg class="profile-dropdown-arrow h-3 w-3 text-stone-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.22 7.47a.75.75 0 0 1 1.06 0L10 11.19l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 8.53a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
     </button>

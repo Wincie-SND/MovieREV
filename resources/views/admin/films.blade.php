@@ -29,7 +29,14 @@
                 Back to site
             </a>
             <div class="flex items-center gap-3 border-t border-white/10 px-2 pt-4">
-                <span class="flex h-9 w-9 items-center justify-center rounded-full bg-red-950 font-bebas text-lg text-red-300">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
+                @php($adminPhotoUrl = Auth::user()->profilePhotoUrl())
+                <span class="relative flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-red-950 font-bebas text-lg text-red-300">
+                    @if ($adminPhotoUrl)
+                        <img src="{{ $adminPhotoUrl }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+                    @else
+                        {{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}
+                    @endif
+                </span>
                 <div class="min-w-0"><p class="truncate text-sm font-medium">{{ Auth::user()->name }}</p><p class="text-xs text-stone-500">Administrator</p></div>
             </div>
         </div>

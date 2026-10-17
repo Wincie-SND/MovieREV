@@ -10,6 +10,7 @@
     $reviewTitle = trim((string) $review->title);
     $displayName = $user?->username ?? $user?->name ?? 'MovieREV member';
     $initial = mb_strtoupper(mb_substr(trim((string) $displayName), 0, 1) ?: '?');
+    $profilePhotoUrl = $user?->profilePhotoUrl();
     $posted = $review->created_at;
     $body = trim((string) $review->body);
     $isOwner = auth()->check() && auth()->id() === $review->user_id;
@@ -35,7 +36,13 @@
             <p class="mt-1 flex flex-wrap items-center gap-2 text-xs text-stone-300">
                 @if ($user)
                     <a href="{{ route('users.show', $user->username) }}" class="no-underline inline-flex items-center gap-2 text-stone-300 transition-colors hover:text-red-300">
-                        <span aria-hidden="true" class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/10 font-bebas text-sm">{{ $initial }}</span>
+                        <span aria-hidden="true" class="relative inline-flex h-6 w-6 shrink-0 items-center justify-center overflow-hidden rounded-full bg-white/10 font-bebas text-sm">
+                            @if ($profilePhotoUrl)
+                                <img src="{{ $profilePhotoUrl }}" alt="" class="absolute inset-0 h-full w-full object-cover">
+                            @else
+                                {{ $initial }}
+                            @endif
+                        </span>
                         <span class="truncate">{{ $displayName }}</span>
                     </a>
                 @else

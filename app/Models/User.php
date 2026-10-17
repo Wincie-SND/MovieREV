@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
+use Illuminate\Auth\MustVerifyEmail as MustVerifyEmailTrait;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,13 +12,15 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Contracts\Auth\MustVerifyEmail as MustVerifyEmailContract;
+use Illuminate\Support\Facades\Storage;
 
 #[Fillable(['name', 'email', 'password', 'username', 'usertype'])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmailContract
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, MustVerifyEmailTrait;
 
     /**
      * Members this user follows.
@@ -49,6 +52,39 @@ class User extends Authenticatable
     public function reviews(): HasMany
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Return the stored profile photo path, if this member has uploaded one.
+     */
+    public function profilePhotoPath(): ?string
+    {
+        foreach (['jpg', 'jpeg', 'png', 'webp'] as $extension) {
+            $path = 'profile-photos/'.$this->getKey().'.'.$extension;
+
+            if (Storage::disk('public')->exists($path)) {
+                return $path;
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Return the route that streams this member's public profile photo.
+     */
+    public function profilePhotoUrl(): ?string
+    {
+        $path = $this->profilePhotoPath();
+
+        if ($path === null) {
+            return null;
+        }
+
+        $absolutePath = Storage::disk('public')->path($path);
+        $version = hash_file('sha256', $absolutePath) ?: Storage::disk('public')->lastModified($path);
+
+        return route('users.avatar', ['user' => $this->username, 'v' => $version]);
     }
 
     /**
