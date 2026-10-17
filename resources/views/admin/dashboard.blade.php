@@ -49,7 +49,7 @@
             <div class="flex items-center gap-3">
                 <span class="hidden text-xs text-stone-500 sm:block">{{ now()->format('D, M j, Y') }}</span>
                 @include('partials.account-menu')
-                <form method="POST" action="{{ route('logout') }}" class="m-0">@csrf<button class="rounded-md border border-red-500 bg-red-500 px-3 py-2 text-xs text-white transition hover:border-red-600 hover:bg-red-600" type="submit">Log out</button></form>
+                <form method="POST" action="{{ route('logout') }}" class="m-0">@csrf<button class="rounded-md red-500 bg-red-500 px-3 py-2 text-xs text-stone-300 transition hover:border-red-500/40 hover:text-white" type="submit">Log out</button></form>
             </div>
         </header>
 
