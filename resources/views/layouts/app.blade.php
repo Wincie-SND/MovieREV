@@ -150,24 +150,26 @@
             appearance: none;
         }
 
-        [data-login-form] input:-webkit-autofill,
-        [data-login-form] input:-webkit-autofill:hover,
-        [data-login-form] input:-webkit-autofill:focus,
-        [data-register-form] input:-webkit-autofill,
-        [data-register-form] input:-webkit-autofill:hover,
-        [data-register-form] input:-webkit-autofill:focus {
-            -webkit-box-shadow: 0 0 0 1000px #2A0A2E inset !important;
-            -webkit-text-fill-color: #fff !important;
-            background-color: #2A0A2E !important;
+        input:autofill {
+            color: #fff !important;
             caret-color: #fff;
             transition: background-color 9999s ease-out 0s;
         }
 
-        [data-login-form] input:-moz-autofill,
-        [data-register-form] input:-moz-autofill {
-            box-shadow: 0 0 0 1000px #2A0A2E inset !important;
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-text-fill-color: #fff !important;
             color: #fff !important;
             caret-color: #fff;
+            transition: background-color 9999s ease-out 0s;
+        }
+
+        input:-moz-autofill {
+            color: #fff !important;
+            caret-color: #fff;
+            transition: background-color 9999s ease-out 0s;
         }
 
         input[type="search"]::-webkit-search-decoration,
