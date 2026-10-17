@@ -48,8 +48,8 @@
             </div>
             <div class="flex items-center gap-3">
                 <span class="hidden text-xs text-stone-500 sm:block">{{ now()->format('D, M j, Y') }}</span>
-                <span class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-stone-900 font-bebas text-lg text-red-300" title="{{ Auth::user()->name }}">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
-                <form method="POST" action="{{ route('logout') }}" class="m-0">@csrf<button class="rounded-md border border-white/10 px-3 py-2 text-xs text-stone-300 transition hover:border-red-500/40 hover:text-white" type="submit">Log out</button></form>
+                @include('partials.account-menu')
+                <form method="POST" action="{{ route('logout') }}" class="m-0">@csrf<button class="rounded-md border border-red-500 bg-red-500 px-3 py-2 text-xs !text-white transition !bg-red-500 hover:!border-red-500 hover:!bg-red-500 hover:!text-white focus:!border-red-500 focus:!bg-red-500 focus:!text-white active:!border-red-500 active:!bg-red-500 active:!text-white disabled:!bg-red-500" type="submit">Log out</button></form>
             </div>
         </header>
 

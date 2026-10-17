@@ -107,6 +107,32 @@
             text-decoration: none !important;
         }
 
+        .profile-dropdown-menu {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-0.4rem) scale(0.98);
+            transform-origin: top right;
+            transition: opacity 160ms ease, transform 160ms ease, visibility 0s linear 160ms;
+            visibility: hidden;
+        }
+
+        .profile-dropdown.is-open > .profile-dropdown-menu,
+        .profile-dropdown.is-hovered > .profile-dropdown-menu,
+        .profile-dropdown:hover > .profile-dropdown-menu,
+        .profile-dropdown:focus-within > .profile-dropdown-menu {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0) scale(1);
+            transition: opacity 160ms ease, transform 160ms ease, visibility 0s;
+            visibility: visible;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .profile-dropdown-menu {
+                transition: none;
+            }
+        }
+
         /*
          * `input[type="search"]` keeps the UA's own searchfield chrome when
          * preflight is off: a `2px inset` border plus decorative widgets. Inside
@@ -124,6 +150,28 @@
             appearance: none;
         }
 
+        input:autofill {
+            color: #fff !important;
+            caret-color: #fff;
+            transition: background-color 9999s ease-out 0s;
+        }
+
+        input:-webkit-autofill,
+        input:-webkit-autofill:hover,
+        input:-webkit-autofill:focus,
+        input:-webkit-autofill:active {
+            -webkit-text-fill-color: #fff !important;
+            color: #fff !important;
+            caret-color: #fff;
+            transition: background-color 9999s ease-out 0s;
+        }
+
+        input:-moz-autofill {
+            color: #fff !important;
+            caret-color: #fff;
+            transition: background-color 9999s ease-out 0s;
+        }
+
         input[type="search"]::-webkit-search-decoration,
         input[type="search"]::-webkit-search-cancel-button,
         input[type="search"]::-webkit-search-results-button,
@@ -139,5 +187,46 @@
 <body class="min-h-screen [background:linear-gradient(180deg,rgba(31,20,47,1)_30%,rgba(73,46,110,1)_100%)]">
     @include('partials.flash')
     @yield('content')
+    <script>
+        document.querySelectorAll('[data-profile-dropdown]').forEach((dropdown) => {
+            const toggle = dropdown.querySelector('[data-profile-menu-toggle]');
+
+            const syncExpanded = () => {
+                toggle.setAttribute('aria-expanded', String(
+                    dropdown.classList.contains('is-open') || dropdown.classList.contains('is-hovered') || dropdown.matches(':hover') || dropdown.matches(':focus-within')
+                ));
+            };
+
+            dropdown.addEventListener('mouseenter', () => {
+                dropdown.classList.add('is-hovered');
+                syncExpanded();
+            });
+
+            dropdown.addEventListener('mouseleave', () => {
+                dropdown.classList.remove('is-hovered');
+                syncExpanded();
+            });
+
+            toggle.addEventListener('click', () => {
+                dropdown.classList.toggle('is-open');
+                syncExpanded();
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!dropdown.contains(event.target)) {
+                    dropdown.classList.remove('is-open');
+                    syncExpanded();
+                }
+            });
+
+            dropdown.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape') {
+                    dropdown.classList.remove('is-open');
+                    syncExpanded();
+                    toggle.focus();
+                }
+            });
+        });
+    </script>
 </body>
 </html>

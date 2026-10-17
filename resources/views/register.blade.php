@@ -106,7 +106,7 @@
                             type="password"
                             id="password"
                             name="password"
-                            placeholder="At least 8 characters"
+                            placeholder="8+ characters, a capital & symbol"
                             autocomplete="new-password"
                             class="w-80 h-8 bg-[#2A0A2E] border-0 pl-[23px] pr-[30px] text-white text-xs [font-family:'Inter',Helvetica,sans-serif] outline-none placeholder:text-stone-500 focus:ring-1 focus:ring-red-500"
                         />

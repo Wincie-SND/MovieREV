@@ -12,7 +12,7 @@
     <div class="mx-auto flex min-h-[71px] w-full max-w-none flex-wrap items-center gap-x-4 gap-y-3 px-4 py-3 sm:flex-nowrap sm:gap-x-5 sm:px-6 sm:py-0 lg:gap-x-8 lg:px-8 2xl:px-10">
         <a href="{{ route('home') }}" class="no-underline flex shrink-0 items-center gap-2" aria-label="MovieREV home">
             <img src="{{ asset('img/logo.png') }}" alt="" class="h-12 w-12 object-contain" />
-            <span class="font-bebas text-2xl tracking-[0.08em] sm:text-3xl"><span class="text-[#d3a3e4]">MOVIE</span><span class="text-red-500">REV</span></span>
+            <span class="font-bebas text-2xl tracking-[0.08em] sm:text-3xl"><span class="text-[#8a4bcd]">MOVIE</span><span class="text-red-500">REV</span></span>
         </a>
 
         <nav class="order-3 flex w-full items-center justify-center gap-7 font-bebas text-lg tracking-[0.08em] text-stone-300 sm:order-none sm:w-auto sm:shrink-0 sm:justify-start sm:gap-6 sm:text-xl lg:gap-8" aria-label="Primary">
@@ -37,10 +37,7 @@
                 <a href="{{ route('register') }}" class="no-underline rounded-full border border-white/20 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-white/10 hover:text-red-400 hover:no-underline">Sign Up</a>
                 <a href="{{ route('login') }}" class="no-underline rounded-full bg-red-500 px-5 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Log In</a>
             @else
-                <a href="{{ route('users.show', Auth::user()->username) }}" class="no-underline flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-stone-200 transition-colors hover:text-red-300" aria-label="View your profile">
-                    <span aria-hidden="true" class="inline-flex h-8 w-8 items-center justify-center rounded-full border border-white/15 bg-gradient-to-br from-fuchsia-900 to-zinc-900 font-bebas text-base sm:h-10 sm:w-10 sm:text-lg">{{ mb_strtoupper(mb_substr(Auth::user()->username, 0, 1)) }}</span>
-                    <span class="hidden max-w-[120px] truncate md:inline">{{ Auth::user()->username }}</span>
-                </a>
+                @include('partials.account-menu')
                 <form method="POST" action="{{ route('logout') }}" class="m-0">
                     @csrf
                     <button type="submit" class="no-underline rounded-full bg-red-500 px-4 py-2 text-xs font-bold uppercase tracking-[0.12em] text-white transition-colors hover:bg-red-600">Log Out</button>

@@ -8,6 +8,7 @@ use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserFollowController;
 use App\Http\Controllers\UserProfileController;
+use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
@@ -19,9 +20,12 @@ Route::get('/movies/{movie}', [MovieController::class, 'show'])
 Route::get('/users/{user:username}', [UserProfileController::class, 'show'])
     ->name('users.show');
 
-// Reviews and follows are member actions, so they are available only to
-// authenticated users.
+// Account settings, reviews and follows are member actions, so they are
+// available only to authenticated users.
 Route::middleware('auth')->group(function () {
+    Route::get('/settings', [UserSettingsController::class, 'show'])->name('settings');
+    Route::put('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
+
     Route::post('/users/{user:username}/follow', [UserFollowController::class, 'store'])
         ->name('users.follow');
     Route::delete('/users/{user:username}/follow', [UserFollowController::class, 'destroy'])

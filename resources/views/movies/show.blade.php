@@ -84,8 +84,8 @@
                         <div class="mt-6 flex flex-wrap gap-3">
                             <a href="#write-review" class="no-underline rounded-full bg-red-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Write a review</a>
                             <button type="button" aria-disabled="true" title="Watch lists are not available yet"
-                                    class="cursor-not-allowed rounded-full border border-grey/30 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-black/60">
-                                + Review Later
+                                    class="cursor-not-allowed rounded-full border border-white/30 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/60">
+                                + Add to watch list
                             </button>
                         </div>
                     </div>
