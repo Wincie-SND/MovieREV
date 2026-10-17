@@ -61,13 +61,16 @@
             <div class="flex items-end justify-between gap-4">
                 <div>
                     <h2 id="favorite-films-heading" class="m-0 text-2xl font-bold text-white [font-family:'Playfair_Display',Georgia,serif] sm:text-3xl">Favorite Films</h2>
-                    <p class="mt-2 text-sm text-stone-400">Films saved in {{ $profile->username }}’s lists</p>
+                    <p class="mt-2 text-sm text-stone-400">Films in {{ '@'.$profile->username }}’s Favorites list</p>
                 </div>
+                @if ($isOwnProfile)
+                    <a href="{{ route('movie-lists.index') }}" class="no-underline rounded-full border border-white/20 px-4 py-2 text-[10px] font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/50 hover:text-red-300">Manage my lists</a>
+                @endif
             </div>
 
             @if ($favoriteFilmCount > 0)
                 <div class="mt-5 rounded-xl border border-white/10 bg-white/[0.04] px-5 py-6 text-sm text-stone-300">
-                    {{ number_format($favoriteFilmCount) }} {{ \Illuminate\Support\Str::plural('film', $favoriteFilmCount) }} saved across this member’s lists.
+                    {{ number_format($favoriteFilmCount) }} {{ \Illuminate\Support\Str::plural('film', $favoriteFilmCount) }} saved to this member’s Favorites list.
                 </div>
             @else
                 <div class="mt-5 rounded-xl border border-dashed border-white/15 bg-white/[0.03] px-5 py-8 text-center">

@@ -25,6 +25,10 @@
     @include('partials.header', ['search' => ''])
 
     <main class="relative mx-auto w-full max-w-[1800px] px-4 pb-16 sm:px-6 lg:px-8 2xl:px-10">
+        @if (session('status'))
+            <p role="status" class="mt-6 rounded-xl border border-green-500/20 bg-green-500/10 px-4 py-3 text-sm text-green-200">{{ session('status') }}</p>
+        @endif
+
         <a href="{{ route('home') }}#films" class="no-underline mt-6 inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-stone-400 transition-colors hover:text-red-400">
             <span aria-hidden="true">&larr;</span> Back to films
         </a>
@@ -83,10 +87,26 @@
 
                         <div class="mt-6 flex flex-wrap gap-3">
                             <a href="#write-review" class="no-underline rounded-full bg-red-500 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:bg-red-600 hover:no-underline">Write a review</a>
-                            <button type="button" aria-disabled="true" title="Watch lists are not available yet"
-                                    class="cursor-not-allowed rounded-full border border-white/30 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white/60">
-                                + Add to watch list
-                            </button>
+                            @auth
+                                @foreach ([['slug' => 'favorites', 'label' => 'Favorites'], ['slug' => 'rate-later', 'label' => 'Rate Later']] as $list)
+                                    @if ($savedLists[$list['slug']])
+                                        <form method="POST" action="{{ route('movie-lists.destroy', ['movie' => $movie->id, 'list' => $list['slug']]) }}" class="m-0">
+                                            @csrf
+                                            @method('DELETE')
+                                            <input type="hidden" name="return_to" value="movie">
+                                            <button type="submit" class="rounded-full border border-red-500/70 bg-red-500/10 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-red-200 transition-colors hover:bg-red-500/20">Remove from {{ $list['label'] }}</button>
+                                        </form>
+                                    @else
+                                        <form method="POST" action="{{ route('movie-lists.store', ['movie' => $movie->id, 'list' => $list['slug']]) }}" class="m-0">
+                                            @csrf
+                                            <button type="submit" class="rounded-full border border-white/20 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-red-500/10 hover:text-red-200">Add to {{ $list['label'] }}</button>
+                                        </form>
+                                    @endif
+                                @endforeach
+                                <a href="{{ route('movie-lists.index') }}" class="no-underline rounded-full border border-white/20 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-stone-300 transition-colors hover:border-white/40 hover:text-white">My Lists</a>
+                            @else
+                                <a href="{{ route('login') }}" class="no-underline rounded-full border border-white/20 px-6 py-2 text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:border-red-500/60 hover:bg-red-500/10 hover:text-red-200">Sign in to save movies</a>
+                            @endauth
                         </div>
                     </div>
                 </div>

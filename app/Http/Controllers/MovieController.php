@@ -6,6 +6,7 @@ use App\Models\Review;
 use App\Services\TmdbClient;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Throwable;
 
@@ -43,6 +44,25 @@ class MovieController extends Controller
             ? null
             : $reviews->firstWhere('user_id', $user->id);
 
+        $savedLists = [
+            'favorites' => false,
+            'rate-later' => false,
+        ];
+
+        if ($user !== null) {
+            $savedNames = DB::table('lists')
+                ->join('list_movies', 'lists.id', '=', 'list_movies.list_id')
+                ->where('lists.user_id', $user->id)
+                ->whereIn('lists.name', ['Favorites', 'Rate Later'])
+                ->where('list_movies.tmdb_id', $movie)
+                ->pluck('lists.name');
+
+            $savedLists = [
+                'favorites' => $savedNames->contains('Favorites'),
+                'rate-later' => $savedNames->contains('Rate Later'),
+            ];
+        }
+
         // `?edit={id}` refills the form with the member's own review. An id
         // that is not theirs is ignored rather than trusted.
         $editingReview = null;
@@ -63,6 +83,7 @@ class MovieController extends Controller
             'communityRating' => $reviews->isEmpty() ? null : round((float) $reviews->avg('rating'), 1),
             'myReview' => $myReview,
             'editingReview' => $editingReview,
+            'savedLists' => $savedLists,
         ]);
     }
 
