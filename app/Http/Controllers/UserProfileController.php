@@ -20,6 +20,7 @@ class UserProfileController extends Controller
         $favoriteFilmCount = DB::table('lists')
             ->join('list_movies', 'lists.id', '=', 'list_movies.list_id')
             ->where('lists.user_id', $user->id)
+            ->where('lists.name', 'Favorites')
             ->distinct()
             ->count('list_movies.tmdb_id');
 

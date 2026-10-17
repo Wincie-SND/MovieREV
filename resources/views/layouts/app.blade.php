@@ -116,6 +116,12 @@
             visibility: hidden;
         }
 
+        .profile-dropdown-arrow {
+            transform-box: fill-box;
+            transform-origin: center;
+            transition: transform 160ms ease;
+        }
+
         .profile-dropdown.is-open > .profile-dropdown-menu,
         .profile-dropdown.is-hovered > .profile-dropdown-menu,
         .profile-dropdown:hover > .profile-dropdown-menu,
@@ -127,8 +133,16 @@
             visibility: visible;
         }
 
+        .profile-dropdown.is-open > [data-profile-menu-toggle] .profile-dropdown-arrow,
+        .profile-dropdown.is-hovered > [data-profile-menu-toggle] .profile-dropdown-arrow,
+        .profile-dropdown:hover > [data-profile-menu-toggle] .profile-dropdown-arrow,
+        .profile-dropdown:focus-within > [data-profile-menu-toggle] .profile-dropdown-arrow {
+            transform: rotate(180deg);
+        }
+
         @media (prefers-reduced-motion: reduce) {
-            .profile-dropdown-menu {
+            .profile-dropdown-menu,
+            .profile-dropdown-arrow {
                 transition: none;
             }
         }

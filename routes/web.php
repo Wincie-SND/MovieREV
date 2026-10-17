@@ -7,6 +7,7 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\MovieController;
 use App\Http\Controllers\ReviewController;
 use App\Http\Controllers\UserFollowController;
+use App\Http\Controllers\UserMovieListController;
 use App\Http\Controllers\UserProfileController;
 use App\Http\Controllers\UserSettingsController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,14 @@ Route::get('/users/{user:username}', [UserProfileController::class, 'show'])
 Route::middleware('auth')->group(function () {
     Route::get('/settings', [UserSettingsController::class, 'show'])->name('settings');
     Route::put('/settings', [UserSettingsController::class, 'update'])->name('settings.update');
+
+    Route::get('/my-lists', [UserMovieListController::class, 'index'])->name('movie-lists.index');
+    Route::post('/movies/{movie}/lists/{list}', [UserMovieListController::class, 'store'])
+        ->where(['movie' => '[1-9][0-9]*', 'list' => 'favorites|rate-later'])
+        ->name('movie-lists.store');
+    Route::delete('/movies/{movie}/lists/{list}', [UserMovieListController::class, 'destroy'])
+        ->where(['movie' => '[1-9][0-9]*', 'list' => 'favorites|rate-later'])
+        ->name('movie-lists.destroy');
 
     Route::post('/users/{user:username}/follow', [UserFollowController::class, 'store'])
         ->name('users.follow');
