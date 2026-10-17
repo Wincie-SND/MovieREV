@@ -48,7 +48,7 @@
             </div>
 
             <div class="relative grid grid-cols-2 border-t border-white/10 sm:grid-cols-4">
-                @foreach ([['Films', $favoriteFilmCount], ['Reviews', $reviewCount], ['Following', $followingCount], ['Followers', $followerCount]] as [$label, $count])
+                @foreach ([['Favorites', $favoriteFilmCount], ['Reviews', $reviewCount], ['Following', $followingCount], ['Followers', $followerCount]] as [$label, $count])
                     <div class="border-b border-white/10 px-4 py-5 text-center last:border-b-0 sm:border-b-0 sm:border-r sm:px-6 sm:last:border-r-0">
                         <p class="m-0 text-2xl font-bold text-white [font-family:'Playfair_Display',Georgia,serif]">{{ number_format($count) }}</p>
                         <p class="mt-1 text-[10px] font-bold uppercase tracking-[0.18em] text-stone-400">{{ $label }}</p>
